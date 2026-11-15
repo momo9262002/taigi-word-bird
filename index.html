@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-Hant-TW">
 <head>
   <meta charset="utf-8">
@@ -374,9 +374,9 @@
       margin-top: 8px;
     }
 
-    /* 顏色學習關卡專屬：繽紛色彩圖鑑與玩法切換列（僅在進入顏色學習關卡時顯示） */
+    /* 顏色學習關卡專屬：五顏六色圖鑑與玩法切換列（僅在進入第11關五顏六色時顯示） */
     .color-learning-bar {
-      display: none;
+      display: none !important;
       margin-bottom: 18px;
       padding: 16px 20px;
       border-radius: 16px;
@@ -384,7 +384,7 @@
       border: 2px dashed #ff6b9d;
       box-shadow: 0 8px 24px rgba(255, 107, 157, 0.16);
     }
-    body.color-level-active .color-learning-bar { display: block; }
+    body.color-level-active .color-learning-bar { display: block !important; }
     .color-bar-header {
       display: flex;
       align-items: center;
@@ -1048,39 +1048,39 @@
       <div class="level-picker-control">
         <label for="level-select">選擇模式／關卡</label>
         <select id="level-select" aria-describedby="mode-hint level-select-note">
-          <option value="campaign" selected>十一關挑戰（從第 1 關開始）</option>
+          <option value="campaign" selected>十一關挑戰（從第 1 關「動物相招」開始）</option>
           <optgroup label="單關試玩">
-            <option value="0">第 1 關 · 動物集合</option>
-            <option value="1">第 2 關 · 禮貌用語</option>
-            <option value="2">第 3 關 · 家人稱謂</option>
-            <option value="3">第 4 關 · 身體部位</option>
-            <option value="4">第 5 關 · 菜蔬攤</option>
-            <option value="5">第 6 關 · 水果攤</option>
-            <option value="6">第 7 關 · 魚肉食材</option>
-            <option value="7">第 8 關 · 料理動作</option>
-            <option value="8">第 9 關 · 滋味辨識</option>
-            <option value="9">第 10 關 · 生活場所</option>
-            <option value="10">第 11 關 · 繽紛色彩</option>
+            <option value="0">第 1 關 · 動物相招（Tōng-bu̍t sio-tsio）</option>
+            <option value="1">第 2 關 · 有禮貌的話（Ū-lé-māu ê uē）</option>
+            <option value="2">第 3 關 · 家己人稱呼（Ka-kī-lâng tshing-hoo）</option>
+            <option value="3">第 4 關 · 身軀部位（Sin-khu phōo-uī）</option>
+            <option value="4">第 5 關 · 菜蔬擔（Tshài-tshoo-tuànn）</option>
+            <option value="5">第 6 關 · 果子擔（Kué-tsí-tuànn）</option>
+            <option value="6">第 7 關 · 魚肉料理物（Hî-bah liāu-lí-mi̍h）</option>
+            <option value="7">第 8 關 · 煮食動作（Tsú-tsia̍h tōng-tsok）</option>
+            <option value="8">第 9 關 · 滋味辨識（Tsu-bī piān-sik）</option>
+            <option value="9">第 10 關 · 生活所在（Sing-ua̍h sóo-tsāi）</option>
+            <option value="10">第 11 關 · 五顏六色（Góo-gân-la̍k-sik）</option>
           </optgroup>
         </select>
       </div>
       <div class="level-picker-description">
-        <p id="mode-hint">十一關挑戰：從第 1 關依序闖關；也可直接選擇任一關試玩。</p>
+        <p id="mode-hint">十一關挑戰：從第 1 關「動物相招」依序闖關；也可直接選擇任一關試玩。</p>
         <p id="level-select-note">切換會重新開始，分數歸零；保留秒數與顯示設定。選好後按下方開始按鈕才倒數（也可直接拉弓試射）。</p>
       </div>
     </section>
 
     <ol id="round-progress" class="round-progress" aria-label="闖關進度"></ol>
 
-    <!-- 顏色學習關卡專屬：台語色彩點讀圖鑑與子模式切換 -->
-    <section class="color-learning-bar" id="color-learning-bar" aria-label="台語顏色學習小幫手">
+    <!-- 顏色學習關卡專屬：台語色彩點讀圖鑑與子模式切換（僅在進入第11關五顏六色時顯示） -->
+    <section class="color-learning-bar" id="color-learning-bar" style="display: none;" aria-label="台語顏色學習小幫手">
       <div class="color-bar-header">
         <div class="color-bar-title">
-          <span>🎨 台語繽紛色彩學習圖鑑（點擊色卡可聽發音提示與例詞）</span>
+          <span>🎨 台語五顏六色學習圖鑑（點擊色卡可聽發音提示與例詞）</span>
         </div>
         <div class="color-submode-group">
           <button type="button" class="submode-btn active" id="submode-category-btn">🌟 認詞闖關（打中 4 個顏色語詞）</button>
-          <button type="button" class="submode-btn" id="submode-target-btn">🎯 指定色彩神射手（依指定顏色射擊）</button>
+          <button type="button" class="submode-btn" id="submode-target-btn">🎯 揀色神射手（依指定顏色射擊）</button>
           <button type="button" class="submode-btn" id="quick-tailo-only-btn">🔤 只顯示台羅</button>
           <button type="button" class="submode-btn" id="quick-poj-only-btn">📜 只顯示白話字（POJ）</button>
           <button type="button" class="submode-btn" id="shuffle-colors-btn">🔄 換一組顏色題目</button>
@@ -1403,13 +1403,16 @@
       {
         index: 0,
         code: "01",
-        title: "動物集合",
+        titleHan: "動物相招",
+        titleTailo: "Tōng-bu̍t sio-tsio",
+        titlePoj: "Tōng-bu̍t sio-chio",
+        title: "動物相招（Tōng-bu̍t sio-tsio）",
         layoutName: "雙塔起步 · 左下地面",
         dir: "right",
         birdPos: { x: 119, y: 490 },
         defaultAngle: 38,
         defaultPower: 58,
-        prompt: "打中所有表示「動物」的語詞",
+        prompt: "射中所有表示「動物相招」的語詞",
         note: "蜜蜂、螞蟻是昆蟲；蜘蛛不是昆蟲，是蛛形綱動物。這一關找所有動物名稱；「龜」取烏龜的意思。",
         stacks: [
           { x: 483, yBase: 454, count: 3 },
@@ -1429,13 +1432,16 @@
       {
         index: 1,
         code: "02",
-        title: "禮貌用語",
+        titleHan: "有禮貌的話",
+        titleTailo: "Ū-lé-māu ê uē",
+        titlePoj: "Ū-lé-māu ê oē",
+        title: "有禮貌的話（Ū-lé-māu ê uē）",
         layoutName: "高低城牆 · 右下地面",
         dir: "left",
         birdPos: { x: 1070, y: 490 },
         defaultAngle: 42,
         defaultPower: 56,
-        prompt: "打中所有表示「禮貌用語」的語詞",
+        prompt: "射中所有表示「有禮貌的話」的語詞",
         note: "「𠢕早」採早安義；「歹勢」採道歉義。",
         stacks: [
           { x: 160, yBase: 454, count: 2 },
@@ -1457,13 +1463,16 @@
       {
         index: 2,
         code: "03",
-        title: "家人稱謂",
+        titleHan: "家己人稱呼",
+        titleTailo: "Ka-kī-lâng tshing-hoo",
+        titlePoj: "Ka-kī-lâng chhing-ho͘",
+        title: "家己人稱呼（Ka-kī-lâng tshing-hoo）",
         layoutName: "中央金字塔 · 左側中臺",
         dir: "right",
         birdPos: { x: 140, y: 380 },
         defaultAngle: 32,
         defaultPower: 55,
-        prompt: "打中所有表示「家人稱謂」的語詞",
+        prompt: "射中所有表示「家己人稱呼」的語詞",
         note: "分辨家中長輩與雙親的台語稱呼。",
         stacks: [
           { x: 420, yBase: 454, count: 2 },
@@ -1484,13 +1493,16 @@
       {
         index: 3,
         code: "04",
-        title: "身體部位",
+        titleHan: "身軀部位",
+        titleTailo: "Sin-khu phōo-uī",
+        titlePoj: "Sin-khu phō͘-ūi",
+        title: "身軀部位（Sin-khu phōo-uī）",
         layoutName: "三段階梯 · 右上高臺",
         dir: "left",
         birdPos: { x: 1060, y: 310 },
         defaultAngle: 20,
         defaultPower: 52,
-        prompt: "打中所有表示「身體部位」的語詞",
+        prompt: "射中所有表示「身軀部位」的語詞",
         note: "認識五官與身體部位的台語說法。",
         stacks: [
           { x: 220, yBase: 454, count: 4 },
@@ -1511,13 +1523,16 @@
       {
         index: 4,
         code: "05",
-        title: "菜蔬攤",
+        titleHan: "菜蔬擔",
+        titleTailo: "Tshài-tshoo-tuànn",
+        titlePoj: "Tshài-tshoo-toàn",
+        title: "菜蔬擔（Tshài-tshoo-tuànn）",
         layoutName: "中央雙向塔 · 中央低臺",
         dir: "right",
         birdPos: { x: 595, y: 470 },
         defaultAngle: 48,
         defaultPower: 46,
-        prompt: "打中所有表示「菜蔬」的語詞",
+        prompt: "射中所有表示「菜蔬擔」的語詞",
         note: "可切換向左或向右發射，瞄準兩側的菜蔬字卡！",
         stacks: [
           { x: 150, yBase: 454, count: 2 },
@@ -1539,13 +1554,16 @@
       {
         index: 5,
         code: "06",
-        title: "水果攤",
+        titleHan: "果子擔",
+        titleTailo: "Kué-tsí-tuànn",
+        titlePoj: "Ké-chí-toàn",
+        title: "果子擔（Kué-tsí-tuànn）",
         layoutName: "高臺拱橋 · 中央高臺",
         dir: "right",
         birdPos: { x: 595, y: 340 },
         defaultAngle: 28,
         defaultPower: 46,
-        prompt: "打中所有表示「水果」的語詞",
+        prompt: "射中所有表示「果子擔」的語詞",
         note: "分辨台灣常見水果的台語名稱。",
         stacks: [
           { x: 140, yBase: 454, count: 2 },
@@ -1567,13 +1585,16 @@
       {
         index: 6,
         code: "07",
-        title: "魚肉食材",
+        titleHan: "魚肉料理物",
+        titleTailo: "Hî-bah liāu-lí-mi̍h",
+        titlePoj: "Hî-bah liāu-lí-mi̍h",
+        title: "魚肉料理物（Hî-bah liāu-lí-mi̍h）",
         layoutName: "高臺城堡 · 左上高臺",
         dir: "right",
         birdPos: { x: 130, y: 310 },
         defaultAngle: 22,
         defaultPower: 55,
-        prompt: "打中所有表示「魚肉海味食材」的語詞",
+        prompt: "射中所有表示「魚肉料理物」的語詞",
         note: "找出屬於肉類與水產海味的食材。",
         stacks: [
           { x: 430, yBase: 454, count: 2 },
@@ -1594,13 +1615,16 @@
       {
         index: 7,
         code: "08",
-        title: "料理動作",
+        titleHan: "煮食動作",
+        titleTailo: "Tsú-tsia̍h tōng-tsok",
+        titlePoj: "Chú-chia̍h tōng-chok",
+        title: "煮食動作（Tsú-tsia̍h tōng-tsok）",
         layoutName: "四段階梯 · 右側中臺",
         dir: "left",
         birdPos: { x: 1060, y: 380 },
         defaultAngle: 35,
         defaultPower: 54,
-        prompt: "打中所有表示「料理動作」的語詞",
+        prompt: "射中所有表示「煮食動作」的語詞",
         note: "分辨「炒、炊、煮、滷」四種台語烹調動作。",
         stacks: [
           { x: 180, yBase: 454, count: 2 },
@@ -1622,13 +1646,16 @@
       {
         index: 8,
         code: "09",
-        title: "滋味辨識",
+        titleHan: "滋味辨識",
+        titleTailo: "Tsu-bī piān-sik",
+        titlePoj: "Chu-bī piān-sek",
+        title: "滋味辨識（Tsu-bī piān-sik）",
         layoutName: "高低錯層 · 偏左低臺",
         dir: "right",
         birdPos: { x: 150, y: 450 },
         defaultAngle: 36,
         defaultPower: 58,
-        prompt: "打中所有表示「味覺滋味」的語詞",
+        prompt: "射中所有表示「滋味辨識」的語詞",
         note: "找出「酸、甜、苦、鹹」四種滋味詞。",
         stacks: [
           { x: 430, yBase: 454, count: 2 },
@@ -1649,13 +1676,16 @@
       {
         index: 9,
         code: "10",
-        title: "生活場所",
+        titleHan: "生活所在",
+        titleTailo: "Sing-ua̍h sóo-tsāi",
+        titlePoj: "Seng-oa̍h só͘-chāi",
+        title: "生活所在（Sing-ua̍h sóo-tsāi）",
         layoutName: "終極堡壘 · 中央中臺",
         dir: "left",
         birdPos: { x: 595, y: 410 },
         defaultAngle: 35,
         defaultPower: 48,
-        prompt: "打中所有表示「生活場所」的語詞",
+        prompt: "射中所有表示「生活所在」的語詞",
         note: "「車頭」限定車站義；「厝」指房屋。",
         stacks: [
           { x: 140, yBase: 454, count: 2 },
@@ -1677,14 +1707,17 @@
       {
         index: 10,
         code: "11",
-        title: "繽紛色彩",
+        titleHan: "五顏六色",
+        titleTailo: "Góo-gân-la̍k-sik",
+        titlePoj: "Gó͘-gân-la̍k-sek",
+        title: "五顏六色（Góo-gân-la̍k-sik）",
         isColorLevel: true,
         layoutName: "彩虹慶典臺 · 歡樂糖果塔",
         dir: "right",
         birdPos: { x: 135, y: 472 },
         defaultAngle: 36,
         defaultPower: 58,
-        prompt: "打中所有表示「顏色」的語詞",
+        prompt: "射中所有表示「五顏六色」的顏色語詞",
         note: "🎉 歡迎來到繽紛色彩嘉年華！從 8 種台語常用顏色詞（紅、黃、青、藍、柑仔色、茄仔色、烏、白）隨機抽選出題，打中綻放彩虹煙火！",
         stacks: [
           { x: 430, yBase: 454, count: 3 },
@@ -2193,10 +2226,26 @@
       return a;
     }
 
+    function getLevelTitle(lv, includeRoman = true) {
+      if (!lv) return "";
+      const showPoj = document.getElementById("show-poj")?.checked;
+      const hideHan = document.getElementById("hide-han")?.checked;
+      const roma = (showPoj ? lv.titlePoj : lv.titleTailo) || lv.titleTailo || "";
+
+      if (hideHan) {
+        return roma;
+      }
+      if (!includeRoman || !roma) {
+        return lv.titleHan || lv.title;
+      }
+      return ${lv.titleHan || lv.title}（）;
+    }
+
     function updateStageHeaderPrompt() {
       const level = LEVELS[currentLevelIdx];
+      const titleDisplay = getLevelTitle(level, true);
       document.getElementById("round-badge").textContent = level.code;
-      document.getElementById("stage-kicker").textContent = `第 ${currentLevelIdx + 1} / ${LEVELS.length} 關 · ${level.title}`;
+      document.getElementById("stage-kicker").textContent = 第  /  關 · ;
       document.getElementById("layout-label").textContent = `${level.layoutName} · ${level.dir === "left" ? "向左發射 ←" : "向右發射 →"}`;
       document.getElementById("stage-note").textContent = level.note;
 
@@ -2284,6 +2333,12 @@
 
       const level = LEVELS[idx];
       remainingSec = levelLimits[idx];
+
+      // 嚴格控制顏色學習面板：僅在進入第 11 關「五顏六色」時才顯示
+      const colorBar = document.getElementById("color-learning-bar");
+      if (colorBar) {
+        colorBar.style.display = level.isColorLevel ? "block" : "none";
+      }
 
       document.getElementById("dir-select").value = level.dir;
       document.getElementById("angle-slider").value = level.defaultAngle;
@@ -2447,7 +2502,7 @@
               startTimer();
             }, 3000);
           } else {
-            showToast(`🏆 太棒了！完成「${level.title}」全部 4 個目標語詞！累計 ${totalScore} 分！`, 4000);
+            showToast(`🏆 太棒了！完成「${getLevelTitle(level, true)}」全部 4 個目標語詞！累計 ${totalScore} 分！`, 4000);
           }
         }
       }, 220);
@@ -2527,7 +2582,7 @@
         <li class="${idx === currentLevelIdx ? 'current' : ''} ${lv.isColorLevel ? 'color-step' : ''}"
             data-idx="${idx}" aria-current="${idx === currentLevelIdx ? 'step' : 'false'}">
           <span>${lv.code}</span>
-          <small>${lv.isColorLevel ? '🌈 ' + lv.title : lv.title}</small>
+          <small>${lv.isColorLevel ? '🌈 ' + getLevelTitle(lv, false) : getLevelTitle(lv, false)}</small>
         </li>
       `).join("");
 
@@ -2585,7 +2640,7 @@
         return `
           <figure class="layout-card ${lv.isColorLevel ? 'color-layout-card' : ''}" data-idx="${idx}">
             <figcaption>
-              <b>${lv.code} · ${lv.isColorLevel ? '🌈 ' + lv.title : lv.title}</b>
+              <b>${lv.code} · ${lv.isColorLevel ? '🌈 ' + getLevelTitle(lv, true) : getLevelTitle(lv, true)}</b>
               <small>${lv.layoutName} ${lv.dir === 'left' ? '←' : '→'}</small>
             </figcaption>
             <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${lv.title} 排列預覽">
@@ -2611,7 +2666,7 @@
       const wrap = document.getElementById("time-inputs");
       wrap.innerHTML = LEVELS.map((lv, idx) => `
         <label class="time-card" for="limit-${idx}">
-          <span><b>${lv.code}</b> ${lv.title}<small>${lv.layoutName.split(" · ")[0]}</small></span>
+          <span><b>${lv.code}</b> ${getLevelTitle(lv, true)}<small>${lv.layoutName.split(" · ")[0]}</small></span>
           <span class="seconds-input">
             <input id="limit-${idx}" type="number" min="0" max="600" step="1" value="${levelLimits[idx]}">
             <small>秒</small>
@@ -2634,7 +2689,7 @@
 
     function renderTeacherBank(idx) {
       const lv = LEVELS[idx];
-      document.getElementById("bank-level-note").textContent = lv.note;
+      document.getElementById("bank-level-note").textContent = `${lv.code} ${getLevelTitle(lv, true)} · ${lv.note}`;
       const tbody = document.getElementById("bank-tbody");
 
       // 若是第 11 關，完整列出 8 個台語顏色詞＋4 個干擾詞供教師檢視
@@ -2662,27 +2717,47 @@
     }
 
     // 綁定控制項事件
+    function updateLevelSelectOptions() {
+      const select = document.getElementById("level-select");
+      if (!select) return;
+      const currentVal = select.value;
+      const bankSelect = document.getElementById("bank-level-select");
+      const bankVal = bankSelect ? bankSelect.value : "0";
+
+      const campaignTitle = getLevelTitle(LEVELS[0], false);
+      const optHtml = `
+        <option value="campaign">十一關挑戰（從第 1 關「${campaignTitle}」開始）</option>
+        <optgroup label="單關試玩">
+          ${LEVELS.map((lv, idx) => `
+            <option value="${idx}">第 ${idx + 1} 關 · ${getLevelTitle(lv, true)}</option>
+          `).join("")}
+        </optgroup>
+      `;
+      select.innerHTML = optHtml;
+      select.value = currentVal;
+
+      if (bankSelect) {
+        bankSelect.innerHTML = LEVELS.map((lv, idx) => `
+          <option value="${idx}">第 ${idx + 1} 關 · ${getLevelTitle(lv, true)}</option>
+        `).join("");
+        bankSelect.value = bankVal;
+      }
+    }
+
     document.getElementById("level-select").addEventListener("change", e => {
       const val = e.target.value;
       if (val === "campaign") {
         gameMode = "campaign";
-        document.getElementById("mode-hint").textContent = "十一關挑戰：從第 1 關依序闖關至第 11 關「繽紛色彩」！";
+        document.getElementById("mode-hint").textContent = `十一關挑戰：從第 1 關「${getLevelTitle(LEVELS[0], true)}」依序闖關至第 11 關「${getLevelTitle(LEVELS[10], true)}」！`;
         loadLevel(0, true);
       } else {
         gameMode = "single";
         const idx = Number(val);
-        document.getElementById("mode-hint").textContent = `單關試玩：第 ${idx + 1} 關「${LEVELS[idx].title}」。`;
+        document.getElementById("mode-hint").textContent = `單關試玩：第 ${idx + 1} 關「${getLevelTitle(LEVELS[idx], true)}」。`;
         loadLevel(idx, true);
       }
     });
 
-    document.getElementById("jump-color-btn").addEventListener("click", () => {
-      document.getElementById("level-select").value = "10";
-      gameMode = "single";
-      loadLevel(10, false);
-      spawnConfetti(W * 0.5, 220, "#ff477e", 65);
-      showToast("🌈 已切換至「第 11 關 · 繽紛色彩學習關卡」！");
-    });
 
     document.getElementById("submode-category-btn").addEventListener("click", () => {
       colorSubmode = "category";
@@ -2764,6 +2839,11 @@
       document.getElementById("bottom-poj-only-btn").classList.toggle("active", isPojOnly);
 
       renderColorPaletteStrip();
+      updateLevelSelectOptions();
+      updateStageHeaderPrompt();
+      renderRoundProgress();
+      renderLayoutGallery();
+      renderTimeInputs();
     }
 
     function setPresetDisplayMode(mode) {
@@ -2880,9 +2960,11 @@
     });
 
     // 初始化題庫選單與畫面
+    updateLevelSelectOptions();
     const bankSelect = document.getElementById("bank-level-select");
-    bankSelect.innerHTML = LEVELS.map((lv, idx) => `<option value="${idx}">第 ${idx + 1} 關 · ${lv.title}</option>`).join("");
-    bankSelect.addEventListener("change", e => renderTeacherBank(Number(e.target.value)));
+    if (bankSelect) {
+      bankSelect.addEventListener("change", e => renderTeacherBank(Number(e.target.value)));
+    }
 
     renderColorPaletteStrip();
     renderLayoutGallery();
