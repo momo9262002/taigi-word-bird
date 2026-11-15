@@ -1954,78 +1954,144 @@
         return { x: px, y: py, w: pw };
       });
 
-      if (useFestive) {
-        // 素面柔和彩色漸層背景（清爽不干擾視線，保留明亮喜悅的色彩感）
-        const cleanPlatforms = platPads.map((p, i) => {
+      // 依關卡主題設計各具特色的乾淨精緻背景
+      const themeConfigs = [
+        // 01 動物集合：溫暖草原與森林綠意
+        {
+          sky1: "#eaf3e0", sky2: "#f3f5db", ground1: "#9cb675", ground2: "#729150",
+          sunColor: "#fbe8a6", sunPos: [260, 150, 48],
+          hills: [{ d: `M0 405 Q280 230 560 410 Q890 220 ${W} 390 V560 H0 Z`, fill: "#cde3be", op: 0.85 },
+                  { d: `M0 465 Q310 320 660 470 Q950 340 ${W} 450 V560 H0 Z`, fill: "#b6d5a1", op: 0.9 }],
+          platFill: "#88704d", platStroke: "#baa580"
+        },
+        // 02 禮貌用語：暖陽晨曦與柔和天青
+        {
+          sky1: "#fbeee6", sky2: "#edf2fa", ground1: "#e0a96d", ground2: "#b87c4c",
+          sunColor: "#ffd6ba", sunPos: [950, 140, 52],
+          hills: [{ d: `M0 415 Q340 250 680 410 Q980 260 ${W} 400 V560 H0 Z`, fill: "#fae1dd", op: 0.75 },
+                  { d: `M0 470 Q260 350 580 470 Q900 360 ${W} 460 V560 H0 Z`, fill: "#e8d1c5", op: 0.85 }],
+          platFill: "#997b66", platStroke: "#d8c2b0"
+        },
+        // 03 家人稱謂：溫馨客廳感／夕陽琥珀暖金色
+        {
+          sky1: "#fdf0d5", sky2: "#fceade", ground1: "#d4a373", ground2: "#bc6c25",
+          sunColor: "#ffe5b4", sunPos: [595, 130, 54],
+          hills: [{ d: `M0 420 Q320 270 620 420 Q920 280 ${W} 410 V560 H0 Z`, fill: "#fed9b7", op: 0.7 },
+                  { d: `M0 475 Q380 360 720 475 Q1020 370 ${W} 460 V560 H0 Z`, fill: "#f0caa3", op: 0.85 }],
+          platFill: "#8c532b", platStroke: "#d29054"
+        },
+        // 04 身體部位：舒爽晨光淡藍綠色調
+        {
+          sky1: "#e0f2f1", sky2: "#e8f5e9", ground1: "#80cbc4", ground2: "#4db6ac",
+          sunColor: "#fff9c4", sunPos: [240, 140, 46],
+          hills: [{ d: `M0 410 Q260 250 540 405 Q860 240 ${W} 395 V560 H0 Z`, fill: "#b2dfdb", op: 0.8 },
+                  { d: `M0 465 Q350 330 700 465 Q1000 340 ${W} 450 V560 H0 Z`, fill: "#a7d7c5", op: 0.85 }],
+          platFill: "#5c8d89", platStroke: "#88b7b2"
+        },
+        // 05 菜蔬攤：田園翠綠與新鮮草綠
+        {
+          sky1: "#f1f8e9", sky2: "#dcedc8", ground1: "#aed581", ground2: "#7cb342",
+          sunColor: "#fff59d", sunPos: [595, 125, 45],
+          hills: [{ d: `M0 400 Q300 230 600 400 Q900 240 ${W} 390 V560 H0 Z`, fill: "#c5e1a5", op: 0.85 },
+                  { d: `M0 460 Q320 330 640 460 Q960 330 ${W} 450 V560 H0 Z`, fill: "#9ccc65", op: 0.85 }],
+          platFill: "#558b2f", platStroke: "#9ccc65"
+        },
+        // 06 水果攤：鮮美果漾甜橙淡黃
+        {
+          sky1: "#fff3e0", sky2: "#ffe0b2", ground1: "#ffb74d", ground2: "#f57c00",
+          sunColor: "#ffe082", sunPos: [950, 130, 50],
+          hills: [{ d: `M0 410 Q320 250 640 410 Q940 250 ${W} 400 V560 H0 Z`, fill: "#ffd54f", op: 0.65 },
+                  { d: `M0 465 Q280 340 600 465 Q920 340 ${W} 455 V560 H0 Z`, fill: "#ffca28", op: 0.75 }],
+          platFill: "#e65100", platStroke: "#ffb74d"
+        },
+        // 07 魚肉食材：蔚藍海岸水色與港灣風情
+        {
+          sky1: "#e1f5fe", sky2: "#e0f7fa", ground1: "#4fc3f7", ground2: "#0288d1",
+          sunColor: "#ffecb3", sunPos: [200, 130, 48],
+          hills: [{ d: `M0 415 Q300 260 620 415 Q920 260 ${W} 405 V560 H0 Z`, fill: "#b3e5fc", op: 0.85 },
+                  { d: `M0 468 Q330 350 660 468 Q980 350 ${W} 458 V560 H0 Z`, fill: "#81d4fa", op: 0.85 }],
+          platFill: "#0277bd", platStroke: "#4fc3f7"
+        },
+        // 08 料理動作：紅磚廚房火候的溫暖暖橘棕
+        {
+          sky1: "#fbe9e7", sky2: "#ffccbc", ground1: "#ff8a65", ground2: "#d84315",
+          sunColor: "#ffe0b2", sunPos: [950, 140, 48],
+          hills: [{ d: `M0 415 Q330 260 660 415 Q960 260 ${W} 405 V560 H0 Z`, fill: "#ffab91", op: 0.75 },
+                  { d: `M0 470 Q280 350 600 470 Q900 350 ${W} 460 V560 H0 Z`, fill: "#ff7043", op: 0.75 }],
+          platFill: "#bf360c", platStroke: "#ff8a65"
+        },
+        // 09 滋味辨識：豐富多彩的酸甜紫藕與淡柑香
+        {
+          sky1: "#f3e5f5", sky2: "#ede7f6", ground1: "#ce93d8", ground2: "#ab47bc",
+          sunColor: "#fff176", sunPos: [220, 140, 46],
+          hills: [{ d: `M0 410 Q280 250 580 410 Q880 250 ${W} 400 V560 H0 Z`, fill: "#e1bee7", op: 0.8 },
+                  { d: `M0 465 Q330 340 680 465 Q980 340 ${W} 455 V560 H0 Z`, fill: "#d1c4e9", op: 0.85 }],
+          platFill: "#7b1fa2", platStroke: "#ba68c8"
+        },
+        // 10 生活場所：靜謐遼闊城鎮鄉野藍綠色
+        {
+          sky1: "#eceff1", sky2: "#cfd8dc", ground1: "#90a4ae", ground2: "#546e7a",
+          sunColor: "#fff9c4", sunPos: [595, 125, 50],
+          hills: [{ d: `M0 410 Q320 250 640 410 Q940 250 ${W} 400 V560 H0 Z`, fill: "#b0bec5", op: 0.8 },
+                  { d: `M0 465 Q290 340 610 465 Q920 340 ${W} 455 V560 H0 Z`, fill: "#78909c", op: 0.85 }],
+          platFill: "#37474f", platStroke: "#78909c"
+        },
+        // 11 繽紛色彩：乾淨明亮的素面四色粉彩漸層
+        {
+          sky1: "#ffe5ec", sky2: "#ede2ff", ground1: "#ff8fab", ground2: "#64dfdf",
+          sunColor: "#ffd166", sunPos: [595, 130, 52],
+          hills: [{ d: `M0 415 Q280 260 580 415 Q880 260 ${W} 405 V560 H0 Z`, fill: "#fff3cc", op: 0.8 },
+                  { d: `M0 470 Q320 350 660 470 Q960 350 ${W} 460 V560 H0 Z`, fill: "#dcf7f3", op: 0.85 }],
+          platFill: "#ff6b8b", platStroke: "#ffd166"
+        }
+      ];
+
+      const cfg = themeConfigs[level.index] || themeConfigs[0];
+
+      const cleanPlatforms = platPads.map((p, i) => {
+        if (useFestive) {
           const hues = ["#ff6b8b", "#ffb703", "#2ec4b6", "#8338ec"];
-          const c = hues[i % hues.length];
-          return `<rect x="${p.x}" y="${p.y}" width="${p.w}" height="10" rx="5" fill="${c}"/>`;
-        }).join("");
+          return `<rect x="${p.x}" y="${p.y}" width="${p.w}" height="10" rx="5" fill="${hues[i % hues.length]}"/>`;
+        } else {
+          return `
+            <g>
+              <rect x="${p.x}" y="${p.y}" width="${p.w}" height="9" rx="3" fill="${cfg.platFill}"></rect>
+              <path d="M${p.x + 5} ${p.y + 2}h${p.w - 10}" stroke="${cfg.platStroke}" stroke-width="2"></path>
+            </g>
+          `;
+        }
+      }).join("");
 
-        svg.innerHTML = `
-          <defs>
-            <linearGradient id="festive-plain-bg" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#ffe5ec"/>
-              <stop offset="33%" stop-color="#fff3cc"/>
-              <stop offset="66%" stop-color="#dcf7f3"/>
-              <stop offset="100%" stop-color="#ede2ff"/>
-            </linearGradient>
-            <linearGradient id="festive-plain-ground" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0%" stop-color="#ff8fab"/>
-              <stop offset="35%" stop-color="#ffd166"/>
-              <stop offset="70%" stop-color="#64dfdf"/>
-              <stop offset="100%" stop-color="#b892ff"/>
-            </linearGradient>
-          </defs>
+      const hillsMarkup = cfg.hills.map(h => `<path d="${h.d}" fill="${h.fill}" opacity="${h.op}"></path>`).join("");
 
-          <!-- 素面柔和彩色背景 -->
-          <rect width="${W}" height="${H}" fill="url(#festive-plain-bg)"/>
+      svg.innerHTML = `
+        <defs>
+          <linearGradient id="theme-sky-${level.index}" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="${cfg.sky1}"/>
+            <stop offset="100%" stop-color="${cfg.sky2}"/>
+          </linearGradient>
+          <linearGradient id="theme-ground-${level.index}" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="${cfg.ground1}"/>
+            <stop offset="100%" stop-color="${cfg.ground2}"/>
+          </linearGradient>
+        </defs>
 
-          <!-- 極簡彩色地平線與標靶底座 -->
-          <rect x="0" y="536" width="${W}" height="24" fill="url(#festive-plain-ground)"/>
-          ${cleanPlatforms}
-        `;
-      } else {
-        // 原本典雅草木綠背景
-        const woodPlatforms = platPads.map(p => `
-          <g>
-            <rect x="${p.x}" y="${p.y}" width="${p.w}" height="9" rx="3" fill="#9b8159"></rect>
-            <path d="M${p.x + 5} ${p.y + 2}h${p.w - 10}" stroke="#c4ab7d" stroke-width="2"></path>
-          </g>
-        `).join("");
+        <!-- 主題漸層天空 -->
+        <rect width="${W}" height="${H}" fill="url(#theme-sky-${level.index})"/>
 
-        svg.innerHTML = `
-          <defs>
-            <linearGradient id="sky" x2="0" y2="1">
-              <stop stop-color="#eaf0e0"></stop>
-              <stop offset="1" stop-color="#f2f1df"></stop>
-            </linearGradient>
-            <linearGradient id="soil" x2="0" y2="1">
-              <stop stop-color="#adb983"></stop>
-              <stop offset="1" stop-color="#8a9e6e"></stop>
-            </linearGradient>
-          </defs>
-          <rect width="${W}" height="${H}" fill="url(#sky)"></rect>
-          <circle cx="274" cy="162" r="59" fill="#f9f1ce"></circle>
-          <path d="M0 392Q214 168 476 397Q833 168 1191.33 386.4V560H0Z" fill="#dbe3c9"></path>
-          <path d="M0 459.2Q262 285.6 583.75 459.2Q941 302.4 1191.33 442.4V560H0Z" fill="#cad7b4"></path>
-          <g transform="translate(32.16 536) scale(1.5)">
-            <path d="M-3 0h6v-89h-6" fill="#a8b18b"></path>
-            <path d="M0-178-38-116h15l-29 44h18l-26 44H60L34-72h18l-29-44h15z" fill="#b6c8a0"></path>
-          </g>
-          <g transform="translate(339.5 535) scale(0.8)">
-            <path d="M-3 0h6v-89h-6" fill="#a8b18b"></path>
-            <path d="M0-178-38-116h15l-29 44h18l-26 44H60L34-72h18l-29-44h15z" fill="#c2ceab"></path>
-          </g>
-          <g transform="translate(1167.5 535) scale(0.65)">
-            <path d="M-3 0h6v-89h-6" fill="#a8b18b"></path>
-            <path d="M0-178-38-116h15l-29 44h18l-26 44H60L34-72h18l-29-44h15z" fill="#bccda5"></path>
-          </g>
-          <path d="M0 536Q214 518 405 536T1191.33 539V560H0Z" fill="url(#soil)"></path>
-          <path d="M0 547Q416 535 833 550T1191.33 546" fill="none" stroke="#c5cdaa" stroke-width="2"></path>
-          ${woodPlatforms}
-        `;
-      }
+        <!-- 柔和遠景暖陽 -->
+        <circle cx="${cfg.sunPos[0]}" cy="${cfg.sunPos[1]}" r="${cfg.sunPos[2]}" fill="${cfg.sunColor}" opacity="0.6"/>
+
+        <!-- 乾淨素面遠山丘陵 -->
+        ${hillsMarkup}
+
+        <!-- 關卡主題地面與地平線 -->
+        <rect x="0" y="536" width="${W}" height="24" fill="url(#theme-ground-${level.index})"/>
+        <path d="M0 536 H${W}" stroke="rgba(255,255,255,0.45)" stroke-width="2"/>
+
+        <!-- 標靶支架底座 -->
+        ${cleanPlatforms}
+      `;
     }
 
     // =========================================================================
