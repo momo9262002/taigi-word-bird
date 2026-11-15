@@ -1,0 +1,2678 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>【台語語詞憤怒鳥 - cjs 】＋ 繽紛色彩學習關卡</title>
+  <meta name="description" content="十一個台語主題（新增繽紛色彩顏色學習關卡），多種字卡配置。每關獨立設定時間，答對加一分、答錯扣一分，逾時結束遊戲。">
+  <style>
+    html { scrollbar-gutter: stable; scroll-behavior: smooth; }
+    :root {
+      color-scheme: light;
+      --ink: #293e35;
+      --muted: #687067;
+      --green: #355546;
+      --paper: #f6f3ea;
+      --card-bg: #fbfaf4;
+      --line: #dedfd2;
+      --orange: #c66b3c;
+      --gold: #d9a441;
+      --accent-soft: #eef1e6;
+      --target-bg: #fffdf6;
+      --target-border: #8fa382;
+    }
+
+    /* 繽紛喜悅慶典主題（當進入「顏色學習關卡」或開啟繽紛模式時自動套用） */
+    body.festive-theme {
+      --ink: #3b1d5e;
+      --muted: #6e4f8f;
+      --green: #d93870;
+      --paper: #fff7fb;
+      --card-bg: #ffffff;
+      --line: #f5c6e0;
+      --orange: #ff5e3a;
+      --gold: #ffb800;
+      --accent-soft: #fff0f8;
+      background:
+        radial-gradient(circle at 12% 15%, rgba(255, 182, 213, 0.45) 0%, transparent 32%),
+        radial-gradient(circle at 88% 12%, rgba(255, 229, 127, 0.5) 0%, transparent 35%),
+        radial-gradient(circle at 82% 78%, rgba(162, 232, 255, 0.45) 0%, transparent 38%),
+        radial-gradient(circle at 18% 82%, rgba(199, 179, 255, 0.4) 0%, transparent 35%),
+        linear-gradient(135deg, #fff6fa 0%, #fffdf2 35%, #f2fbff 70%, #fcf4ff 100%);
+      background-attachment: fixed;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, -apple-system, sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.5;
+      transition: background 0.45s ease, color 0.3s ease;
+    }
+
+    /* 頂部導覽列 */
+    header.site-header {
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--line);
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .brand-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+    }
+    .brand-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 11px;
+      background: var(--green);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: 20px;
+      box-shadow: 0 3px 10px rgba(53, 85, 70, 0.2);
+      transition: transform 0.25s ease, background 0.3s ease;
+    }
+    body.festive-theme .brand-icon {
+      background: linear-gradient(135deg, #ff477e, #ff9a00, #2ec4b6, #8338ec);
+      background-size: 200% 200%;
+      animation: rainbowShift 4s ease infinite;
+      box-shadow: 0 4px 14px rgba(255, 71, 126, 0.35);
+    }
+    @keyframes rainbowShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .brand-text b {
+      display: block;
+      font-size: 16px;
+      letter-spacing: 0.02em;
+    }
+    .brand-text small {
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .badge-pill {
+      font-size: 12px;
+      padding: 5px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.7);
+      color: var(--muted);
+    }
+    .color-quick-btn {
+      padding: 7px 14px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 13px;
+      color: #fff;
+      background: linear-gradient(90deg, #ff4d6d, #ff9e00, #2ec4b6, #7209b7);
+      background-size: 200% auto;
+      box-shadow: 0 3px 12px rgba(255, 77, 109, 0.3);
+      transition: transform 0.15s ease, box-shadow 0.2s ease;
+      animation: rainbowShift 5s linear infinite;
+    }
+    .color-quick-btn:hover {
+      transform: translateY(-1px) scale(1.02);
+      box-shadow: 0 5px 16px rgba(255, 77, 109, 0.45);
+    }
+    .link-btn {
+      background: none;
+      border: none;
+      color: var(--ink);
+      font-size: 13px;
+      cursor: pointer;
+      padding: 6px 10px;
+      border-radius: 8px;
+    }
+    .link-btn:hover { background: rgba(0, 0, 0, 0.05); }
+
+    main {
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 22px 20px 48px;
+    }
+
+    .intro { margin-bottom: 18px; }
+    .eyebrow {
+      margin: 0 0 4px;
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    .intro h1 {
+      margin: 0 0 6px;
+      font-size: clamp(24px, 3vw, 32px);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .festive-tag {
+      display: none;
+      font-size: 14px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #ff477e, #ff9e00, #00b4d8, #9b5de5);
+      color: #fff;
+      font-weight: 700;
+      box-shadow: 0 3px 10px rgba(255, 71, 126, 0.28);
+    }
+    body.festive-theme .festive-tag { display: inline-flex; align-items: center; gap: 5px; }
+    .intro p { margin: 0; color: var(--muted); font-size: 15px; }
+
+    /* 選關控制區 */
+    .level-picker {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 16px 20px;
+      background: var(--accent-soft);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+    body.festive-theme .level-picker {
+      background: linear-gradient(120deg, rgba(255,235,245,0.92), rgba(255,250,225,0.92), rgba(232,249,255,0.92));
+      border: 2px solid #f7a8d0;
+      box-shadow: 0 6px 20px rgba(255, 105, 180, 0.12);
+    }
+    .level-picker-control {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 260px;
+    }
+    .level-picker-control label {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+    select, input[type="number"] {
+      font: inherit;
+      padding: 9px 12px;
+      border-radius: 9px;
+      border: 1px solid #cbd0c0;
+      background: #fff;
+      color: var(--ink);
+    }
+    .level-picker-description p {
+      margin: 2px 0;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .level-picker-description p:first-child {
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    /* 闖關進度列 */
+    .round-progress {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 18px;
+      display: grid;
+      grid-template-columns: repeat(11, minmax(0, 1fr));
+      gap: 8px;
+    }
+    @media (max-width: 900px) {
+      .round-progress { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    }
+    .round-progress li {
+      padding-top: 8px;
+      border-top: 3px solid #dcded0;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .round-progress li:hover { border-top-color: var(--orange); transform: translateY(-1px); }
+    .round-progress li.current {
+      border-top-color: var(--orange);
+    }
+    .round-progress li.done {
+      border-top-color: var(--green);
+    }
+    .round-progress li.color-step {
+      border-top-image: linear-gradient(90deg, #ff477e, #ffb703, #06d6a0, #4cc9f0, #9b5de5) 1;
+    }
+    .round-progress li span {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+    .round-progress li.current span { color: var(--orange); }
+    .round-progress li small {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .round-progress li.current small {
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    /* 排列預覽 */
+    .layout-preview, .time-settings, .teacher-bank {
+      margin: 0 0 18px;
+      background: #eeefe5;
+      border: 1px solid #dedfd1;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    body.festive-theme .layout-preview,
+    body.festive-theme .time-settings,
+    body.festive-theme .teacher-bank {
+      background: rgba(255, 255, 255, 0.88);
+      border-color: #f3bfe0;
+    }
+    .layout-preview summary,
+    .time-settings summary,
+    .teacher-bank summary {
+      padding: 12px 18px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--ink);
+      cursor: pointer;
+    }
+    .layout-preview summary small,
+    .time-settings summary small,
+    .teacher-bank summary small {
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--muted);
+      margin-left: 12px;
+    }
+    .layout-gallery {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 10px;
+      padding: 0 14px 16px;
+    }
+    @media (max-width: 960px) {
+      .layout-gallery { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+    @media (max-width: 600px) {
+      .layout-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    .layout-card {
+      margin: 0;
+      min-width: 0;
+      padding: 10px;
+      border: 1px solid #d2dbc6;
+      border-radius: 10px;
+      background: #f8f7ed;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .layout-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    .layout-card.color-layout-card {
+      border: 2px solid #ff70a6;
+      background: linear-gradient(145deg, #fff0f6, #fffbe6, #e8fbff);
+    }
+    .layout-card figcaption b { display: block; font-size: 12px; color: #385741; }
+    .layout-card.color-layout-card figcaption b { color: #c9184a; }
+    .layout-card figcaption small { font-size: 11px; color: #9b783e; }
+    .layout-card svg {
+      display: block;
+      width: 100%;
+      height: 110px;
+      background: #e9efdf;
+      border-radius: 6px;
+      margin-top: 8px;
+    }
+
+    /* 顏色學習關卡專屬：繽紛色彩圖鑑與玩法切換列 */
+    .color-learning-bar {
+      display: none;
+      margin-bottom: 18px;
+      padding: 16px 20px;
+      border-radius: 16px;
+      background: linear-gradient(120deg, #fff0f6 0%, #fff9db 35%, #e3fafc 70%, #f3d9fa 100%);
+      border: 2px dashed #ff6b9d;
+      box-shadow: 0 8px 24px rgba(255, 107, 157, 0.16);
+    }
+    body.festive-theme .color-learning-bar { display: block; }
+    .color-bar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+    .color-bar-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 16px;
+      color: #8a1c56;
+    }
+    .color-submode-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .submode-btn {
+      padding: 6px 13px;
+      border-radius: 999px;
+      border: 1.5px solid #e599f7;
+      background: #fff;
+      color: #5f3dc4;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .submode-btn.active {
+      background: linear-gradient(90deg, #ff477e, #9b5de5);
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 3px 10px rgba(155, 93, 229, 0.3);
+    }
+    .color-palette-strip {
+      display: grid;
+      grid-template-columns: repeat(8, minmax(0, 1fr));
+      gap: 8px;
+    }
+    @media (max-width: 860px) {
+      .color-palette-strip { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    }
+    .color-chip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.92);
+      border: 1.5px solid rgba(0, 0, 0, 0.08);
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      text-align: left;
+    }
+    .color-chip:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    .color-swatch {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      border: 2px solid rgba(0,0,0,0.15);
+      box-shadow: inset 0 2px 4px rgba(255,255,255,0.5);
+    }
+    .color-chip-info b {
+      display: block;
+      font-size: 13px;
+      color: #2b2d42;
+      line-height: 1.2;
+    }
+    .color-chip-info span {
+      display: block;
+      font-size: 11px;
+      color: #6c757d;
+    }
+
+    /* 主遊戲區卡片 */
+    .game-shell {
+      background: var(--card-bg);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(41, 62, 53, 0.06);
+      margin-bottom: 18px;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    body.festive-theme .game-shell {
+      border: 3px solid #ff85b3;
+      box-shadow: 0 14px 38px rgba(255, 71, 126, 0.18), 0 0 0 5px rgba(255, 224, 102, 0.35);
+    }
+
+    .stage-header {
+      padding: 18px 24px 14px;
+      border-bottom: 3px solid #9ab08f;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+    body.festive-theme .stage-header {
+      background: linear-gradient(90deg, rgba(255,240,247,0.9), rgba(255,251,230,0.9), rgba(235,251,255,0.9));
+      border-bottom: 4px solid transparent;
+      border-image: linear-gradient(90deg, #ff477e, #ff9e00, #ffd166, #06d6a0, #118ab2, #9b5de5) 1;
+    }
+    .stage-title-group {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .round-badge {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: #efe8d2;
+      color: #8b6d38;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: 19px;
+      flex-shrink: 0;
+    }
+    body.festive-theme .round-badge {
+      background: linear-gradient(135deg, #ff477e, #ffb703);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(255, 71, 126, 0.35);
+    }
+    .stage-meta small {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .stage-meta h2 {
+      margin: 2px 0 0;
+      font-size: clamp(18px, 2.2vw, 23px);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .target-color-dot {
+      display: inline-block;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid rgba(0,0,0,0.2);
+      vertical-align: middle;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+    .score-panel {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+    }
+    .score-item {
+      text-align: left;
+    }
+    .score-item small {
+      display: block;
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .score-item b {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--ink);
+    }
+    .score-item.timer-item b {
+      color: #9e6b30;
+    }
+    body.festive-theme .score-item.timer-item b {
+      color: #d93870;
+    }
+    .stage-note {
+      width: 100%;
+      margin: 4px 0 0;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    /* 彈弓畫布區 */
+    .arena {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1191.333 / 560;
+      min-height: 360px;
+      background: #eaf0e0;
+      overflow: hidden;
+      user-select: none;
+      touch-action: none;
+    }
+    .landscape {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      pointer-events: none;
+    }
+    .field-note {
+      position: absolute;
+      top: 14px;
+      left: 20px;
+      z-index: 4;
+      font-size: 12px;
+      color: #4b5e4c;
+      background: rgba(255, 255, 255, 0.72);
+      backdrop-filter: blur(4px);
+      padding: 5px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(0,0,0,0.06);
+    }
+    body.festive-theme .field-note {
+      color: #6b1d57;
+      background: rgba(255, 255, 255, 0.88);
+      border-color: rgba(255, 105, 180, 0.35);
+      font-weight: 600;
+    }
+    .field-note .dot {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #4f7a5a;
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+    body.festive-theme .field-note .dot {
+      background: #ff477e;
+    }
+    .field-note small {
+      display: block;
+      color: #778273;
+      font-size: 11px;
+    }
+
+    /* 狀態覆蓋提示（開局倒數／過關／喜悅彩球） */
+    .toast-banner {
+      position: absolute;
+      top: 54px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 12;
+      padding: 8px 18px;
+      border-radius: 999px;
+      background: rgba(41, 62, 53, 0.88);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.22s ease, transform 0.22s ease;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.16);
+      white-space: nowrap;
+    }
+    body.festive-theme .toast-banner {
+      background: linear-gradient(90deg, #ff3e7f, #ff9900, #16c79a, #7b2cbf);
+      font-size: 15px;
+    }
+    .toast-banner.visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(4px);
+    }
+
+    /* 字卡標靶 */
+    .targets {
+      position: absolute;
+      inset: 0;
+      z-index: 5;
+      pointer-events: none;
+    }
+    .target {
+      position: absolute;
+      background: var(--target-bg);
+      border: 2px solid var(--target-border);
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(45, 65, 50, 0.12);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      text-align: center;
+      transition: top 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.2s ease, opacity 0.2s ease;
+    }
+    .target::before, .target::after {
+      content: "";
+      position: absolute;
+      top: 6px;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: #c5b689;
+    }
+    .target::before { left: 6px; }
+    .target::after { right: 6px; }
+
+    /* 顏色學習關卡的繽紛花俏字卡外框 */
+    body.festive-theme .target {
+      border-width: 3px;
+      border-radius: 12px;
+      background: linear-gradient(180deg, #ffffff 0%, #fff9fd 100%);
+      box-shadow: 0 6px 14px rgba(180, 60, 130, 0.18);
+    }
+    body.festive-theme .target[data-festive-border="0"] { border-color: #ff595e; }
+    body.festive-theme .target[data-festive-border="1"] { border-color: #ffca3a; }
+    body.festive-theme .target[data-festive-border="2"] { border-color: #8ac926; }
+    body.festive-theme .target[data-festive-border="3"] { border-color: #1982c4; }
+    body.festive-theme .target[data-festive-border="4"] { border-color: #6a4c93; }
+    body.festive-theme .target[data-festive-border="5"] { border-color: #ff924c; }
+    body.festive-theme .target[data-festive-border="6"] { border-color: #ff6392; }
+    body.festive-theme .target[data-festive-border="7"] { border-color: #00bbf9; }
+
+    .target .color-hint-pill {
+      width: 28px;
+      height: 8px;
+      border-radius: 999px;
+      margin-bottom: 3px;
+      border: 1px solid rgba(0,0,0,0.18);
+      display: none;
+    }
+    .targets.show-color-swatch .target .color-hint-pill {
+      display: block;
+    }
+
+    .word-han {
+      font-size: 19px;
+      font-weight: 800;
+      color: var(--ink);
+      line-height: 1.15;
+    }
+    .word-tailo {
+      font-size: 11.5px;
+      color: #697468;
+      margin-top: 2px;
+      line-height: 1.1;
+      transition: font-size 0.18s ease, color 0.18s ease, font-weight 0.18s ease;
+    }
+    .word-chinese {
+      font-size: 11px;
+      color: #9b6b2f;
+      margin-top: 2px;
+      font-weight: 600;
+      line-height: 1.1;
+    }
+    .targets.no-han .word-han { display: none; }
+    .targets.no-han .word-tailo {
+      font-size: 15.5px;
+      font-weight: 800;
+      color: var(--ink);
+      margin-top: 0;
+      letter-spacing: 0.01em;
+    }
+    .targets.no-tailo .word-tailo { display: none; }
+    .targets.no-chinese .word-chinese { display: none; }
+    .color-palette-strip.no-han .color-chip-info b { display: none; }
+    .color-palette-strip.no-han .color-chip-info span {
+      font-size: 13px;
+      font-weight: 800;
+      color: #2b2d42;
+    }
+
+    .target.hit-correct {
+      background: #d8f3dc !important;
+      border-color: #2d6a4f !important;
+      transform: scale(1.18) rotate(-6deg);
+      opacity: 0;
+    }
+    .target.hit-wrong {
+      background: #ffe3e3 !important;
+      border-color: #c92a2a !important;
+      transform: scale(0.9) rotate(8deg);
+      opacity: 0;
+    }
+
+    /* 彈弓與軌跡覆蓋 SVG */
+    .slingshot-overlay {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 6;
+      pointer-events: none;
+    }
+
+    /* 小鳥按鈕 */
+    .bird {
+      position: absolute;
+      z-index: 8;
+      padding: 0;
+      border: none;
+      background: transparent;
+      cursor: grab;
+      display: grid;
+      place-items: center;
+      touch-action: none;
+    }
+    .bird:active { cursor: grabbing; }
+    .bird:disabled { cursor: default; }
+
+    /* 慶典紙花粒子畫布 */
+    .confetti-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    /* 底部操控列 */
+    .controls-panel {
+      padding: 16px 24px 18px;
+      background: #faf9f2;
+      border-top: 1px solid var(--line);
+    }
+    body.festive-theme .controls-panel {
+      background: linear-gradient(90deg, #fff8fb, #fffef5, #f5fcff);
+    }
+    .controls-row {
+      display: grid;
+      grid-template-columns: auto 1fr 1fr auto;
+      gap: 20px;
+      align-items: center;
+    }
+    @media (max-width: 920px) {
+      .controls-row { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 560px) {
+      .controls-row { grid-template-columns: 1fr; }
+    }
+    .control-block label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+    .control-block label span.val {
+      color: #4f7754;
+      font-weight: 800;
+    }
+    body.festive-theme .control-block label span.val {
+      color: #d93870;
+    }
+    input[type="range"] {
+      width: 100%;
+      accent-color: #5b7c53;
+      cursor: pointer;
+    }
+    body.festive-theme input[type="range"] {
+      accent-color: #ff477e;
+    }
+    .range-legend {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+    .action-buttons {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .primary-btn {
+      padding: 11px 20px;
+      border-radius: 10px;
+      border: none;
+      background: var(--green);
+      color: #fff;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      transition: transform 0.15s ease, opacity 0.2s ease;
+    }
+    body.festive-theme .primary-btn {
+      background: linear-gradient(135deg, #ff3e7f, #ff8c00);
+      box-shadow: 0 4px 14px rgba(255, 62, 127, 0.35);
+    }
+    .primary-btn:hover { transform: translateY(-1px); }
+    .secondary-btn {
+      padding: 10px 16px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: #f1f0e8;
+      color: var(--ink);
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .secondary-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .drag-help {
+      margin: 12px 0 0;
+      font-size: 12.5px;
+      color: var(--muted);
+    }
+    .sub-hint-bar {
+      margin-top: 12px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: #f1f3e8;
+      font-size: 12.5px;
+      color: #4f6250;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    body.festive-theme .sub-hint-bar {
+      background: #fff0f7;
+      color: #8a1c56;
+    }
+
+    /* 顯示設定區 */
+    .display-settings {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+      padding: 8px 4px;
+      font-size: 13px;
+    }
+    .display-options {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .display-options label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    /* 時間設定與題庫表格 */
+    .time-content, .bank-content {
+      padding: 0 18px 18px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .time-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      margin: 12px 0;
+    }
+    @media (max-width: 860px) {
+      .time-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    .time-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 10px 12px;
+      background: #faf9f2;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+    }
+    .time-card b { display: block; font-size: 12px; color: var(--orange); }
+    .time-card small { display: block; font-size: 11px; color: var(--muted); }
+    .seconds-input {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .seconds-input input { width: 68px; text-align: center; }
+
+    table.bank-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      font-size: 13px;
+    }
+    table.bank-table th, table.bank-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #e8e9df;
+      text-align: left;
+      vertical-align: top;
+    }
+    table.bank-table th {
+      background: #f3f4ec;
+      color: var(--ink);
+      font-weight: 700;
+    }
+    .ans-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 700;
+    }
+    .ans-ok { background: #d8f3dc; color: #1b4332; }
+    .ans-no { background: #ffe3e3; color: #a51d2d; }
+
+    footer.site-footer {
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 18px 20px 36px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--muted);
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    footer.site-footer a { color: var(--ink); }
+  </style>
+</head>
+<body class="festive-theme">
+  <header class="site-header">
+    <a class="brand-link" href="#game">
+      <span class="brand-icon">鳥</span>
+      <span class="brand-text">
+        <b>【台語語詞憤怒鳥 - cjs 】</b>
+        <small>拉弓．認詞．闖關</small>
+      </span>
+    </a>
+    <div class="header-actions">
+      <button type="button" class="color-quick-btn" id="jump-color-btn">🌈 立即體驗「繽紛色彩學習關卡」✨</button>
+      <span class="badge-pill">11 關・多點發射</span>
+      <button type="button" class="link-btn" id="open-bank-btn">教師題庫 ↗</button>
+    </div>
+  </header>
+
+  <main id="game">
+    <div class="intro">
+      <p class="eyebrow">TAIGI WORD ADVENTURE</p>
+      <h1>
+        【台語語詞憤怒鳥 - cjs 】
+        <span class="festive-tag">🎉 繽紛色彩喜悅慶典模式</span>
+      </h1>
+      <p>先讀主題，再瞄準。打中正確語詞 ＋1 分，打錯 －1 分。</p>
+    </div>
+
+    <section class="level-picker" aria-label="遊戲模式與選關">
+      <div class="level-picker-control">
+        <label for="level-select">選擇模式／關卡</label>
+        <select id="level-select" aria-describedby="mode-hint level-select-note">
+          <option value="campaign">十一關挑戰（從第 1 關開始）</option>
+          <optgroup label="🌈 新增特色學習關卡">
+            <option value="10" selected>第 11 關 · 繽紛色彩（顏色學習關卡）✨</option>
+          </optgroup>
+          <optgroup label="單關試玩（原 10 關＋第 11 關）">
+            <option value="0">第 1 關 · 動物集合</option>
+            <option value="1">第 2 關 · 禮貌用語</option>
+            <option value="2">第 3 關 · 家人稱謂</option>
+            <option value="3">第 4 關 · 身體部位</option>
+            <option value="4">第 5 關 · 菜蔬攤</option>
+            <option value="5">第 6 關 · 水果攤</option>
+            <option value="6">第 7 關 · 魚肉食材</option>
+            <option value="7">第 8 關 · 料理動作</option>
+            <option value="8">第 9 關 · 滋味辨識</option>
+            <option value="9">第 10 關 · 生活場所</option>
+            <option value="10">第 11 關 · 繽紛色彩（顏色學習）</option>
+          </optgroup>
+        </select>
+      </div>
+      <div class="level-picker-description">
+        <p id="mode-hint">單關試玩：第 11 關「繽紛色彩」顏色學習關卡，背景採繽紛花俏嘉年華慶典風格！</p>
+        <p id="level-select-note">切換會重新開始，分數歸零；保留秒數與顯示設定。選好後按下方開始按鈕才倒數（也可直接拉弓試射）。</p>
+      </div>
+    </section>
+
+    <ol id="round-progress" class="round-progress" aria-label="闖關進度"></ol>
+
+    <!-- 顏色學習關卡專屬：台語色彩點讀圖鑑與子模式切換 -->
+    <section class="color-learning-bar" id="color-learning-bar" aria-label="台語顏色學習小幫手">
+      <div class="color-bar-header">
+        <div class="color-bar-title">
+          <span>🎨 台語繽紛色彩學習圖鑑（點擊色卡可聽發音提示與例詞）</span>
+        </div>
+        <div class="color-submode-group">
+          <button type="button" class="submode-btn active" id="submode-category-btn">🌟 認詞闖關（打中 4 個顏色語詞）</button>
+          <button type="button" class="submode-btn" id="submode-target-btn">🎯 指定色彩神射手（依指定顏色射擊）</button>
+          <button type="button" class="submode-btn" id="quick-tailo-only-btn">🔤 隱藏漢字（練習看羅馬字）</button>
+          <button type="button" class="submode-btn" id="shuffle-colors-btn">🔄 換一組顏色題目</button>
+        </div>
+      </div>
+      <div class="color-palette-strip" id="color-palette-strip"></div>
+    </section>
+
+    <details id="layout-preview" class="layout-preview">
+      <summary>十一關排列預覽 <small>可先查看每關的配置差異（點擊卡片可直接跳關）</small></summary>
+      <div id="layout-gallery" class="layout-gallery"></div>
+    </details>
+
+    <!-- 遊戲主舞台 -->
+    <section class="game-shell" aria-label="遊戲舞台與積分">
+      <div class="stage-header">
+        <div class="stage-title-group">
+          <div class="round-badge" id="round-badge">11</div>
+          <div class="stage-meta">
+            <small id="stage-kicker">第 11 / 11 關 · 繽紛色彩</small>
+            <h2 id="stage-prompt">打中所有表示「顏色」的語詞</h2>
+          </div>
+        </div>
+        <div class="score-panel" aria-label="累計、本關成績與時間">
+          <div class="score-item"><small>累計分數</small><b id="total-score">0</b></div>
+          <div class="score-item"><small>本關得分</small><b id="round-score">0</b></div>
+          <div class="score-item"><small>正確命中</small><b id="hit-progress">0 <span style="font-size:14px;font-weight:500;color:var(--muted)">/ 4</span></b></div>
+          <div class="score-item timer-item"><small>剩餘時間</small><b><span id="timer-readout">75</span> <span style="font-size:13px;font-weight:500">秒</span></b></div>
+        </div>
+        <p class="stage-note" id="stage-note">
+          台語顏色詞真趣味！「青色 tshenn-sik」常指綠色或青色，「烏色 oo-sik」是黑色，「柑仔色 kam-á-sik」是橘色，「茄仔色 kiô-á-sik」是紫色。
+        </p>
+      </div>
+
+      <div class="arena" id="arena" role="group" aria-label="彈弓遊戲區">
+        <svg id="landscape" class="landscape" aria-hidden="true" viewBox="0 0 1191.3333740234375 560"></svg>
+
+        <div class="field-note">
+          <span class="dot"></span>
+          <span id="layout-label">彩虹慶典臺 · 左下歡樂發射</span> · 打掉一張，上方落下
+          <small>只計直接命中的那一張</small>
+        </div>
+
+        <div class="toast-banner" id="toast-banner" role="status" aria-live="polite"></div>
+
+        <div id="targets" class="targets no-chinese show-color-swatch"></div>
+
+        <svg class="slingshot-overlay" id="slingshot-svg" viewBox="0 0 1191.3333740234375 560" aria-hidden="true">
+          <g id="slingshot-wood"></g>
+          <path id="band-back" stroke="#5b3e2b" stroke-width="5" stroke-linecap="round" fill="none"></path>
+          <path id="trajectory" stroke="#6c8463" stroke-width="3.5" stroke-dasharray="2 14" stroke-linecap="round" fill="none"></path>
+          <path id="band-front" stroke="#432c1e" stroke-width="5" stroke-linecap="round" fill="none"></path>
+          <ellipse id="bird-shadow" cx="119" cy="535" rx="14" ry="3.5" fill="rgba(0,0,0,0.18)"></ellipse>
+        </svg>
+
+        <button id="bird" class="bird" type="button" aria-label="小鳥。往發射方向的反側拖曳後放開發射；也可選方向、按上下鍵調角度、左右鍵調力道、空白鍵發射。" style="width: 48px; height: 48px;">
+          <svg id="bird-svg" viewBox="0 0 64 64" aria-hidden="true" style="width: 40px; height: 40px;"></svg>
+        </button>
+
+        <canvas id="confetti-canvas" class="confetti-canvas"></canvas>
+      </div>
+
+      <div class="controls-panel">
+        <div class="controls-row">
+          <div class="control-block">
+            <label for="dir-select">發射方向</label>
+            <select id="dir-select">
+              <option value="right">向右 →</option>
+              <option value="left">← 向左</option>
+            </select>
+          </div>
+
+          <div class="control-block">
+            <label for="angle-slider"><span>發射角度</span><span class="val" id="angle-val">38°</span></label>
+            <input id="angle-slider" type="range" min="-88" max="88" value="38">
+            <div class="range-legend"><span>向下 −88°</span><span>平射 0°</span><span>高拋 88°</span></div>
+          </div>
+
+          <div class="control-block">
+            <label for="power-slider"><span>拉射力道</span><span class="val" id="power-val">58%</span></label>
+            <input id="power-slider" type="range" min="15" max="100" value="58">
+            <div class="range-legend"><span>輕輕拉</span><span>用力拉</span></div>
+          </div>
+
+          <div class="action-buttons">
+            <button type="button" class="primary-btn" id="start-btn">開始本關挑戰 ↗</button>
+            <button type="button" class="secondary-btn" id="shoot-btn">發射 🚀</button>
+            <button type="button" class="secondary-btn" id="pause-btn" disabled>暫停</button>
+            <button type="button" class="secondary-btn" id="reset-btn">從頭重玩</button>
+          </div>
+        </div>
+
+        <p class="drag-help" id="drag-help">
+          向右發射：把小鳥往左拉，上下拉動調整角度，放開射出（或直接按「發射 🚀」／空白鍵）。
+        </p>
+        <div class="sub-hint-bar">
+          <span>↗</span>
+          <span>可先展開「各關計時設定」調整秒數。按「開始本關挑戰」啟動倒數，未按開始前也可直接拉弓練習！</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 顯示設定 -->
+    <section class="display-settings" aria-label="本關顯示與計時設定">
+      <div class="display-options">
+        <span>語詞呈現</span>
+        <label><input type="checkbox" id="hide-han"> 隱藏漢字（練習看羅馬字）</label>
+        <label><input type="checkbox" id="show-tailo" checked> 顯示台羅</label>
+        <label><input type="checkbox" id="show-chinese"> 顯示中文</label>
+        <label><input type="checkbox" id="show-swatch" checked> 顏色關卡顯示色塊提示</label>
+        <label><input type="checkbox" id="festive-bg-toggle" checked> 繽紛喜悅慶典背景</label>
+        <span>標靶大小</span>
+        <select id="target-size">
+          <option value="normal" selected>一般</option>
+          <option value="large">加大</option>
+        </select>
+        <span id="size-readout" style="color:var(--muted)">82 × 82 px</span>
+      </div>
+      <div style="color:var(--muted);font-size:12px;">
+        各關發射點與排列不同；可向左或向右射擊。勾選「隱藏漢字」時字卡將放大顯示台羅拼音，方便專注練習羅馬字。
+      </div>
+    </section>
+
+    <!-- 各關計時設定 -->
+    <details id="time-settings" class="time-settings">
+      <summary><span>各關計時設定</span><small>每關獨立設定，預設各 75 秒</small></summary>
+      <div class="time-content">
+        <p id="time-help">開局前設定 1–600 整數秒；輸入 0 表示該關不計時。進行中設定會鎖定，重玩後可調整。</p>
+        <div class="time-grid" id="time-inputs"></div>
+        <button type="button" class="secondary-btn" id="reset-times-btn">恢復各關 75 秒</button>
+      </div>
+    </details>
+
+    <!-- 教師題庫與來源 -->
+    <details id="teacher-bank" class="teacher-bank">
+      <summary><span>十一關完整題庫與來源</span><small>每關 4 個正確詞＋4 個干擾詞（含第 11 關繽紛色彩完整 8 色題庫）</small></summary>
+      <div class="bank-content">
+        <p>教師查看區。語詞逐詞核對教育部臺灣台語常用詞辭典；漢字、台羅與用義保留來源。</p>
+        <div style="display:flex;align-items:center;gap:10px;margin:10px 0;">
+          <label for="bank-level-select" style="font-weight:700;color:var(--ink)">選擇題庫關卡</label>
+          <select id="bank-level-select"></select>
+        </div>
+        <p id="bank-level-note" style="color:var(--ink);font-weight:600;"></p>
+        <table class="bank-table">
+          <thead>
+            <tr>
+              <th>台語漢字</th>
+              <th>台羅</th>
+              <th>中文解釋</th>
+              <th>答案</th>
+              <th>判定與教學備註</th>
+              <th>核對來源</th>
+            </tr>
+          </thead>
+          <tbody id="bank-tbody"></tbody>
+        </table>
+      </div>
+    </details>
+  </main>
+
+  <footer class="site-footer">
+    <span>【台語語詞憤怒鳥 - cjs 】＋ 繽紛色彩學習關卡</span>
+    <a href="https://taigi-life-islands.cjs-1359.chatgpt.site/?island=amusement" target="_blank" rel="noopener">返回台語生活島・主題樂園 ↗</a>
+    <span>本次成績只留在此頁，重整即清除</span>
+  </footer>
+
+  <script>
+    // =========================================================================
+    // 1. 台語繽紛色彩完整詞庫（核對教育部臺灣台語常用詞辭典）
+    // =========================================================================
+    const TAIGI_COLORS = [
+      {
+        id: "red",
+        han: "紅色",
+        tailo: "âng-sik",
+        zh: "紅色",
+        hex: "#ff3b5c",
+        note: "象徵喜氣、熱鬧的紅色！台語唸作 âng-sik（亦作紅 âng），過年貼春聯、結婚喜慶最常用。",
+        dict: "https://sutian.moe.edu.tw/zh-hant/su/5413/"
+      },
+      {
+        id: "yellow",
+        han: "黃色",
+        tailo: "n̂g-sik",
+        zh: "黃色",
+        hex: "#ffd100",
+        note: "明亮溫暖的黃色！白讀音 n̂g-sik（如「弓蕉是黃色的」），充滿陽光與喜悅感。",
+        dict: "https://sutian.moe.edu.tw/zh-hant/su/9676/"
+      },
+      {
+        id: "green",
+        han: "青色",
+        tailo: "tshenn-sik",
+        zh: "綠色／青色",
+        hex: "#2ec4b6",
+        note: "台語「青色 tshenn-sik / tshinn-sik」常指草木的綠色（如青菜、青草）或青綠色，是台語色彩詞的重要特色！",
+        dict: "https://sutian.moe.edu.tw/zh-hant/su/4275/"
+      },
+      {
+        id: "blue",
+        han: "藍色",
+        tailo: "nâ-sik",
+        zh: "藍色",
+        hex: "#3a86ff",
+        note: "晴空與大海的藍色，台語唸作 nâ-sik。",
+        dict: "https://sutian.moe.edu.tw/zh-hant/su/11912/"
+      },
+      {
+        id: "orange",
+        han: "柑仔色",
+        tailo: "kam-á-sik",
+        zh: "橘色、橙色",
+        hex: "#ff7b00",
+        note: "像橘子（柑仔 kam-á）一樣活潑的橘色！台語以水果命名顏色，非常生動好記。",
+        dict: "https://sutian.moe.edu.tw/zh-hant/su/5086/"
+      },
+      {
+        id: "purple",
+        han: "茄仔色",
+        tailo: "kiô-á-sik",
+        zh: "紫色",
+        hex: "#9b5de5",
+        note: "像茄子（茄仔 kiô-á）一樣優雅的紫色！台語稱為「茄仔色 kiô-á-sik」。",
+        dict: "https://sutian.moe.edu.tw/zh-hant/su/4686/"
+      },
+      {
+        id: "black",
+        han: "烏色",
+        hanAlt: "烏色",
+        tailo: "oo-sik",
+        zh: "黑色",
+        hex: "#343a40",
+        note: "台語的「黑色」說成「烏色 oo-sik」（例如烏雲、烏暗），不說 hēi-sik 喔！",
+        dict: "https://sutian.moe.edu.tw/zh-hant/su/6152/"
+      },
+      {
+        id: "white",
+        han: "白色",
+        tailo: "pe̍h-sik",
+        zh: "白色",
+        hex: "#f8f9fa",
+        note: "雲朵與白米的白色，台語採白讀音 pe̍h-sik。",
+        dict: "https://sutian.moe.edu.tw/zh-hant/su/1901/"
+      }
+    ];
+
+    const COLOR_DISTRACTORS = [
+      { id: "d_chair", han: "椅仔", tailo: "í-á", zh: "椅子", ok: false, note: "是供人坐的家具物品，不屬於「顏色」語詞。", dict: "https://sutian.moe.edu.tw/zh-hant/su/8492/" },
+      { id: "d_garlic", han: "蒜頭", tailo: "suàn-thâu", zh: "大蒜", ok: false, note: "是料理辛香食材，不屬於「顏色」語詞。", dict: "https://sutian.moe.edu.tw/zh-hant/su/10798/" },
+      { id: "d_pot", han: "鼎", tailo: "tiánn", zh: "大鍋", ok: false, note: "是廚房烹飪器具，不屬於「顏色」語詞。", dict: "https://sutian.moe.edu.tw/zh-hant/su/10354/" },
+      { id: "d_market", han: "菜市仔", tailo: "tshài-tshī-á", zh: "菜市場", ok: false, note: "是生活買賣場所，不屬於「顏色」語詞。", dict: "https://sutian.moe.edu.tw/zh-hant/su/8939/" }
+    ];
+
+    // =========================================================================
+    // 2. 十一關完整設定（保留原 10 關 + 新增第 11 關「繽紛色彩」）
+    // =========================================================================
+    const LEVELS = [
+      {
+        index: 0,
+        code: "01",
+        title: "動物集合",
+        layoutName: "雙塔起步 · 左下地面",
+        dir: "right",
+        birdPos: { x: 119, y: 490 },
+        defaultAngle: 38,
+        defaultPower: 58,
+        prompt: "打中所有表示「動物」的語詞",
+        note: "蜜蜂、螞蟻是昆蟲；蜘蛛不是昆蟲，是蛛形綱動物。這一關找所有動物名稱；「龜」取烏龜的意思。",
+        stacks: [
+          { x: 483, yBase: 454, count: 3 },
+          { x: 983, yBase: 454, count: 5 }
+        ],
+        words: [
+          { id: "turtle", han: "龜", tailo: "ku", zh: "烏龜", ok: true, note: "本關指烏龜，是動物名稱。採白讀 ku，限定動物義。", dict: "https://sutian.moe.edu.tw/zh-hant/su/12093/" },
+          { id: "garlic", han: "蒜頭", tailo: "suàn-thâu", zh: "大蒜", ok: false, note: "是植物及食材，不是動物名稱。", dict: "https://sutian.moe.edu.tw/zh-hant/su/10798/" },
+          { id: "spider", han: "蜘蛛", tailo: "ti-tu", zh: "蜘蛛", ok: true, note: "蜘蛛是蛛形綱動物，仍符合本關的動物主題。", dict: "https://sutian.moe.edu.tw/zh-hant/su/10809/" },
+          { id: "market", han: "菜市仔", tailo: "tshài-tshī-á", zh: "菜市場", ok: false, note: "指買賣物品的場所，不是動物名稱。", dict: "https://sutian.moe.edu.tw/zh-hant/su/8939/" },
+          { id: "chair", han: "椅仔", tailo: "í-á", zh: "椅子", ok: false, note: "是供人坐的物品，不是動物名稱。", dict: "https://sutian.moe.edu.tw/zh-hant/su/8492/" },
+          { id: "ant", han: "狗蟻", tailo: "káu-hiā", zh: "螞蟻", ok: true, note: "指螞蟻，屬於昆蟲，也是動物。", dict: "https://sutian.moe.edu.tw/zh-hant/su/4367/" },
+          { id: "stirfry", han: "炒", tailo: "tshá", zh: "炒（料理方式）", ok: false, note: "表示烹調的動作，不是動物名稱。", dict: "https://sutian.moe.edu.tw/zh-hant/su/4319/" },
+          { id: "bee", han: "蜂", tailo: "phang", zh: "蜂（如蜜蜂）", ok: true, note: "蜂類（例如蜜蜂）屬於昆蟲，也是動物。", dict: "https://sutian.moe.edu.tw/zh-hant/su/9989/" }
+        ]
+      },
+      {
+        index: 1,
+        code: "02",
+        title: "禮貌用語",
+        layoutName: "高低城牆 · 右下地面",
+        dir: "left",
+        birdPos: { x: 1070, y: 490 },
+        defaultAngle: 42,
+        defaultPower: 56,
+        prompt: "打中所有表示「禮貌用語」的語詞",
+        note: "「𠢕早」採早安義；「歹勢」採道歉義。",
+        stacks: [
+          { x: 160, yBase: 454, count: 2 },
+          { x: 380, yBase: 454, count: 2 },
+          { x: 610, yBase: 454, count: 2 },
+          { x: 820, yBase: 454, count: 2 }
+        ],
+        words: [
+          { id: "morning", han: "𠢕早", tailo: "gâu-tsá", zh: "早安", ok: true, note: "「𠢕早」在本關表示早安，符合「禮貌用語」主題。", dict: "https://sutian.moe.edu.tw/zh-hant/su/13473/" },
+          { id: "garlic", han: "蒜頭", tailo: "suàn-thâu", zh: "大蒜", ok: false, note: "「蒜頭」表示大蒜，不屬於「禮貌用語」。", dict: "https://sutian.moe.edu.tw/zh-hant/su/10798/" },
+          { id: "thanks", han: "多謝", tailo: "to-siā", zh: "謝謝", ok: true, note: "「多謝」在本關表示謝謝，符合「禮貌用語」主題。", dict: "https://sutian.moe.edu.tw/zh-hant/su/2415/" },
+          { id: "chair", han: "椅仔", tailo: "í-á", zh: "椅子", ok: false, note: "「椅仔」表示椅子，不屬於「禮貌用語」。", dict: "https://sutian.moe.edu.tw/zh-hant/su/8492/" },
+          { id: "turtle", han: "龜", tailo: "ku", zh: "烏龜", ok: false, note: "「龜」表示烏龜，不屬於「禮貌用語」。", dict: "https://sutian.moe.edu.tw/zh-hant/su/12093/" },
+          { id: "sorry", han: "歹勢", tailo: "pháinn-sè", zh: "對不起、不好意思", ok: true, note: "「歹勢」表示對不起、不好意思，符合「禮貌用語」主題。", dict: "https://sutian.moe.edu.tw/zh-hant/su/1093/" },
+          { id: "stirfry", han: "炒", tailo: "tshá", zh: "炒（料理方式）", ok: false, note: "「炒」表示料理方式，不屬於「禮貌用語」。", dict: "https://sutian.moe.edu.tw/zh-hant/su/4319/" },
+          { id: "bye", han: "再會", tailo: "tsài-huē", zh: "再見", ok: true, note: "「再會」表示再見，符合「禮貌用語」主題。", dict: "https://sutian.moe.edu.tw/zh-hant/su/2232/" }
+        ]
+      },
+      {
+        index: 2,
+        code: "03",
+        title: "家人稱謂",
+        layoutName: "中央金字塔 · 左側中臺",
+        dir: "right",
+        birdPos: { x: 140, y: 380 },
+        defaultAngle: 32,
+        defaultPower: 55,
+        prompt: "打中所有表示「家人稱謂」的語詞",
+        note: "分辨家中長輩與雙親的台語稱呼。",
+        stacks: [
+          { x: 420, yBase: 454, count: 2 },
+          { x: 650, yBase: 454, count: 4 },
+          { x: 920, yBase: 454, count: 2 }
+        ],
+        words: [
+          { id: "grandpa", han: "阿公", tailo: "a-kong", zh: "爺爺、外公", ok: true, note: "符合「家人稱謂」主題。", dict: "https://sutian.moe.edu.tw/zh-hant/su/4508/" },
+          { id: "market", han: "菜市仔", tailo: "tshài-tshī-á", zh: "菜市場", ok: false, note: "不屬於「家人稱謂」。", dict: "https://sutian.moe.edu.tw/zh-hant/su/8939/" },
+          { id: "grandma", han: "阿媽", tailo: "a-má", zh: "奶奶、外婆", ok: true, note: "符合「家人稱謂」主題。", dict: "https://sutian.moe.edu.tw/zh-hant/su/4621/" },
+          { id: "scallion", han: "蔥仔", tailo: "tshang-á", zh: "蔥", ok: false, note: "不屬於「家人稱謂」。", dict: "https://sutian.moe.edu.tw/zh-hant/su/11332/" },
+          { id: "chair", han: "椅仔", tailo: "í-á", zh: "椅子", ok: false, note: "不屬於「家人稱謂」。", dict: "https://sutian.moe.edu.tw/zh-hant/su/8492/" },
+          { id: "dad", han: "阿爸", tailo: "a-pah", zh: "爸爸", ok: true, note: "符合「家人稱謂」主題。", dict: "https://sutian.moe.edu.tw/zh-hant/su/4558/" },
+          { id: "spider", han: "蜘蛛", tailo: "ti-tu", zh: "蜘蛛", ok: false, note: "不屬於「家人稱謂」。", dict: "https://sutian.moe.edu.tw/zh-hant/su/10809/" },
+          { id: "mom", han: "阿母", tailo: "a-bú", zh: "媽媽", ok: true, note: "符合「家人稱謂」主題。", dict: "https://sutian.moe.edu.tw/zh-hant/su/4524/" }
+        ]
+      },
+      {
+        index: 3,
+        code: "04",
+        title: "身體部位",
+        layoutName: "三段階梯 · 右上高臺",
+        dir: "left",
+        birdPos: { x: 1060, y: 310 },
+        defaultAngle: 20,
+        defaultPower: 52,
+        prompt: "打中所有表示「身體部位」的語詞",
+        note: "認識五官與身體部位的台語說法。",
+        stacks: [
+          { x: 220, yBase: 454, count: 4 },
+          { x: 510, yBase: 454, count: 3 },
+          { x: 780, yBase: 454, count: 1 }
+        ],
+        words: [
+          { id: "eye", han: "目睭", tailo: "ba̍k-tsiu", zh: "眼睛", ok: true, note: "符合「身體部位」主題。", dict: "https://sutian.moe.edu.tw/zh-hant/su/1975/" },
+          { id: "pot", han: "鼎", tailo: "tiánn", zh: "大鍋", ok: false, note: "不屬於「身體部位」。", dict: "https://sutian.moe.edu.tw/zh-hant/su/10354/" },
+          { id: "foot", han: "跤", tailo: "kha", zh: "腳、腿", ok: true, note: "符合「身體部位」主題。", dict: "https://sutian.moe.edu.tw/zh-hant/su/10059/" },
+          { id: "turtle", han: "龜", tailo: "ku", zh: "烏龜", ok: false, note: "不屬於「身體部位」。", dict: "https://sutian.moe.edu.tw/zh-hant/su/12093/" },
+          { id: "market", han: "菜市仔", tailo: "tshài-tshī-á", zh: "菜市場", ok: false, note: "不屬於「身體部位」。", dict: "https://sutian.moe.edu.tw/zh-hant/su/8939/" },
+          { id: "mouth", han: "喙", tailo: "tshuì", zh: "嘴巴", ok: true, note: "符合「身體部位」主題。", dict: "https://sutian.moe.edu.tw/zh-hant/su/8174/" },
+          { id: "mango", han: "檨仔", tailo: "suāinn-á", zh: "芒果", ok: false, note: "不屬於「身體部位」。", dict: "https://sutian.moe.edu.tw/zh-hant/su/12189/" },
+          { id: "belly", han: "腹肚", tailo: "pak-tóo", zh: "肚子", ok: true, note: "符合「身體部位」主題。", dict: "https://sutian.moe.edu.tw/zh-hant/su/9907/" }
+        ]
+      },
+      {
+        index: 4,
+        code: "05",
+        title: "菜蔬攤",
+        layoutName: "中央雙向塔 · 中央低臺",
+        dir: "right",
+        birdPos: { x: 595, y: 470 },
+        defaultAngle: 48,
+        defaultPower: 46,
+        prompt: "打中所有表示「菜蔬」的語詞",
+        note: "可切換向左或向右發射，瞄準兩側的菜蔬字卡！",
+        stacks: [
+          { x: 150, yBase: 454, count: 2 },
+          { x: 320, yBase: 454, count: 2 },
+          { x: 800, yBase: 454, count: 2 },
+          { x: 970, yBase: 454, count: 2 }
+        ],
+        words: [
+          { id: "loofah", han: "菜瓜", tailo: "tshài-kue", zh: "絲瓜", ok: true, note: "符合「菜蔬」主題。", dict: "https://sutian.moe.edu.tw/zh-hant/su/8940/" },
+          { id: "banana", han: "弓蕉", tailo: "king-tsio", zh: "香蕉", ok: false, note: "屬於水果，不是菜蔬。", dict: "https://sutian.moe.edu.tw/zh-hant/su/529/" },
+          { id: "scallion", han: "蔥仔", tailo: "tshang-á", zh: "蔥", ok: true, note: "符合「菜蔬」主題。", dict: "https://sutian.moe.edu.tw/zh-hant/su/11332/" },
+          { id: "pork", han: "豬肉", tailo: "ti-bah", zh: "豬肉", ok: false, note: "屬於肉類，不是菜蔬。", dict: "https://sutian.moe.edu.tw/zh-hant/su/11411/" },
+          { id: "pot", han: "鼎", tailo: "tiánn", zh: "大鍋", ok: false, note: "屬於廚具，不是菜蔬。", dict: "https://sutian.moe.edu.tw/zh-hant/su/10354/" },
+          { id: "garlic", han: "蒜頭", tailo: "suàn-thâu", zh: "大蒜", ok: true, note: "符合「菜蔬」主題。", dict: "https://sutian.moe.edu.tw/zh-hant/su/10798/" },
+          { id: "thanks", han: "多謝", tailo: "to-siā", zh: "謝謝", ok: false, note: "屬於禮貌用語，不是菜蔬。", dict: "https://sutian.moe.edu.tw/zh-hant/su/2415/" },
+          { id: "carrot", han: "紅菜頭", tailo: "âng-tshài-thâu", zh: "胡蘿蔔", ok: true, note: "符合「菜蔬」主題。", dict: "https://sutian.moe.edu.tw/zh-hant/su/5419/" }
+        ]
+      },
+      {
+        index: 5,
+        code: "06",
+        title: "水果攤",
+        layoutName: "高臺拱橋 · 中央高臺",
+        dir: "right",
+        birdPos: { x: 595, y: 340 },
+        defaultAngle: 28,
+        defaultPower: 46,
+        prompt: "打中所有表示「水果」的語詞",
+        note: "分辨台灣常見水果的台語名稱。",
+        stacks: [
+          { x: 140, yBase: 454, count: 2 },
+          { x: 310, yBase: 454, count: 2 },
+          { x: 810, yBase: 454, count: 2 },
+          { x: 980, yBase: 454, count: 2 }
+        ],
+        words: [
+          { id: "pineapple", han: "王梨", tailo: "ông-lâi", zh: "鳳梨", ok: true, note: "符合「水果」主題。", dict: "https://sutian.moe.edu.tw/zh-hant/su/1260/" },
+          { id: "loofah", han: "菜瓜", tailo: "tshài-kue", zh: "絲瓜", ok: false, note: "不屬於「水果」。", dict: "https://sutian.moe.edu.tw/zh-hant/su/8940/" },
+          { id: "banana", han: "弓蕉", tailo: "king-tsio", zh: "香蕉", ok: true, note: "符合「水果」主題。", dict: "https://sutian.moe.edu.tw/zh-hant/su/529/" },
+          { id: "scallion", han: "蔥仔", tailo: "tshang-á", zh: "蔥", ok: false, note: "不屬於「水果」。", dict: "https://sutian.moe.edu.tw/zh-hant/su/11332/" },
+          { id: "milkfish", han: "虱目魚", tailo: "sat-ba̍k-hî", zh: "虱目魚", ok: false, note: "不屬於「水果」。", dict: "https://sutian.moe.edu.tw/zh-hant/su/4529/" },
+          { id: "mango", han: "檨仔", tailo: "suāinn-á", zh: "芒果", ok: true, note: "符合「水果」主題。", dict: "https://sutian.moe.edu.tw/zh-hant/su/12189/" },
+          { id: "market", han: "菜市仔", tailo: "tshài-tshī-á", zh: "菜市場", ok: false, note: "不屬於「水果」。", dict: "https://sutian.moe.edu.tw/zh-hant/su/8939/" },
+          { id: "tangerine", han: "柑仔", tailo: "kam-á", zh: "橘子", ok: true, note: "符合「水果」主題。", dict: "https://sutian.moe.edu.tw/zh-hant/su/5084/" }
+        ]
+      },
+      {
+        index: 6,
+        code: "07",
+        title: "魚肉食材",
+        layoutName: "高臺城堡 · 左上高臺",
+        dir: "right",
+        birdPos: { x: 130, y: 310 },
+        defaultAngle: 22,
+        defaultPower: 55,
+        prompt: "打中所有表示「魚肉海味食材」的語詞",
+        note: "找出屬於肉類與水產海味的食材。",
+        stacks: [
+          { x: 430, yBase: 454, count: 2 },
+          { x: 700, yBase: 454, count: 3 },
+          { x: 960, yBase: 454, count: 3 }
+        ],
+        words: [
+          { id: "pork", han: "豬肉", tailo: "ti-bah", zh: "豬肉", ok: true, note: "符合「魚肉食材」主題。", dict: "https://sutian.moe.edu.tw/zh-hant/su/11411/" },
+          { id: "carrot", han: "紅菜頭", tailo: "âng-tshài-thâu", zh: "胡蘿蔔", ok: false, note: "不屬於「魚肉食材」。", dict: "https://sutian.moe.edu.tw/zh-hant/su/5419/" },
+          { id: "squid", han: "鰇魚", tailo: "jiû-hî", zh: "魷魚", ok: true, note: "符合「魚肉食材」主題。", dict: "https://sutian.moe.edu.tw/zh-hant/su/13048/" },
+          { id: "mango", han: "檨仔", tailo: "suāinn-á", zh: "芒果", ok: false, note: "不屬於「魚肉食材」。", dict: "https://sutian.moe.edu.tw/zh-hant/su/12189/" },
+          { id: "pot", han: "鼎", tailo: "tiánn", zh: "大鍋", ok: false, note: "不屬於「魚肉食材」。", dict: "https://sutian.moe.edu.tw/zh-hant/su/10354/" },
+          { id: "milkfish", han: "虱目魚", tailo: "sat-ba̍k-hî", zh: "虱目魚", ok: true, note: "符合「魚肉食材」主題。", dict: "https://sutian.moe.edu.tw/zh-hant/su/4529/" },
+          { id: "farm", han: "田園", tailo: "tshân-hn̂g", zh: "農田", ok: false, note: "不屬於「魚肉食材」。", dict: "https://sutian.moe.edu.tw/zh-hant/su/1971/" },
+          { id: "shrimp", han: "蝦米", tailo: "hê-bí", zh: "蝦米", ok: true, note: "符合「魚肉食材」主題。", dict: "https://sutian.moe.edu.tw/zh-hant/su/11335/" }
+        ]
+      },
+      {
+        index: 7,
+        code: "08",
+        title: "料理動作",
+        layoutName: "四段階梯 · 右側中臺",
+        dir: "left",
+        birdPos: { x: 1060, y: 380 },
+        defaultAngle: 35,
+        defaultPower: 54,
+        prompt: "打中所有表示「料理動作」的語詞",
+        note: "分辨「炒、炊、煮、滷」四種台語烹調動作。",
+        stacks: [
+          { x: 180, yBase: 454, count: 2 },
+          { x: 390, yBase: 454, count: 2 },
+          { x: 600, yBase: 454, count: 2 },
+          { x: 810, yBase: 454, count: 2 }
+        ],
+        words: [
+          { id: "stirfry", han: "炒", tailo: "tshá", zh: "炒（料理方式）", ok: true, note: "符合「料理動作」主題。", dict: "https://sutian.moe.edu.tw/zh-hant/su/4319/" },
+          { id: "pot", han: "鼎", tailo: "tiánn", zh: "大鍋", ok: false, note: "是廚具，不是料理動作。", dict: "https://sutian.moe.edu.tw/zh-hant/su/10354/" },
+          { id: "steam", han: "炊", tailo: "tshue", zh: "蒸（料理方式）", ok: true, note: "符合「料理動作」主題。", dict: "https://sutian.moe.edu.tw/zh-hant/su/4317/" },
+          { id: "pork", han: "豬肉", tailo: "ti-bah", zh: "豬肉", ok: false, note: "是食材，不是料理動作。", dict: "https://sutian.moe.edu.tw/zh-hant/su/11411/" },
+          { id: "scallion", han: "蔥仔", tailo: "tshang-á", zh: "蔥", ok: false, note: "是食材，不是料理動作。", dict: "https://sutian.moe.edu.tw/zh-hant/su/11332/" },
+          { id: "boil", han: "煮", tailo: "tsú", zh: "煮（料理方式）", ok: true, note: "符合「料理動作」主題。", dict: "https://sutian.moe.edu.tw/zh-hant/su/8566/" },
+          { id: "house", han: "厝", tailo: "tshù", zh: "房屋、家", ok: false, note: "是場所，不是料理動作。", dict: "https://sutian.moe.edu.tw/zh-hant/su/5790/" },
+          { id: "braise", han: "滷", tailo: "lóo", zh: "滷（料理方式）", ok: true, note: "符合「料理動作」主題。", dict: "https://sutian.moe.edu.tw/zh-hant/su/10566/" }
+        ]
+      },
+      {
+        index: 8,
+        code: "09",
+        title: "滋味辨識",
+        layoutName: "高低錯層 · 偏左低臺",
+        dir: "right",
+        birdPos: { x: 150, y: 450 },
+        defaultAngle: 36,
+        defaultPower: 58,
+        prompt: "打中所有表示「味覺滋味」的語詞",
+        note: "找出「酸、甜、苦、鹹」四種滋味詞。",
+        stacks: [
+          { x: 430, yBase: 454, count: 2 },
+          { x: 680, yBase: 424, count: 3 },
+          { x: 950, yBase: 454, count: 3 }
+        ],
+        words: [
+          { id: "sour", han: "酸", tailo: "sng", zh: "酸味", ok: true, note: "符合「滋味」主題。", dict: "https://sutian.moe.edu.tw/zh-hant/su/10860/" },
+          { id: "pineapple", han: "王梨", tailo: "ông-lâi", zh: "鳳梨", ok: false, note: "是水果，不是滋味詞。", dict: "https://sutian.moe.edu.tw/zh-hant/su/1260/" },
+          { id: "sweet", han: "甜", tailo: "tinn", zh: "甜味", ok: true, note: "符合「滋味」主題。", dict: "https://sutian.moe.edu.tw/zh-hant/su/7630/" },
+          { id: "pot", han: "鼎", tailo: "tiánn", zh: "大鍋", ok: false, note: "不屬於「滋味」。", dict: "https://sutian.moe.edu.tw/zh-hant/su/10354/" },
+          { id: "stirfry", han: "炒", tailo: "tshá", zh: "炒（料理方式）", ok: false, note: "不屬於「滋味」。", dict: "https://sutian.moe.edu.tw/zh-hant/su/4319/" },
+          { id: "bitter", han: "苦", tailo: "khóo", zh: "苦味", ok: true, note: "符合「滋味」主題。", dict: "https://sutian.moe.edu.tw/zh-hant/su/5452/" },
+          { id: "thanks", han: "多謝", tailo: "to-siā", zh: "謝謝", ok: false, note: "不屬於「滋味」。", dict: "https://sutian.moe.edu.tw/zh-hant/su/2415/" },
+          { id: "salty", han: "鹹", tailo: "kiâm", zh: "鹹味", ok: true, note: "符合「滋味」主題。", dict: "https://sutian.moe.edu.tw/zh-hant/su/13052/" }
+        ]
+      },
+      {
+        index: 9,
+        code: "10",
+        title: "生活場所",
+        layoutName: "終極堡壘 · 中央中臺",
+        dir: "left",
+        birdPos: { x: 595, y: 410 },
+        defaultAngle: 35,
+        defaultPower: 48,
+        prompt: "打中所有表示「生活場所」的語詞",
+        note: "「車頭」限定車站義；「厝」指房屋。",
+        stacks: [
+          { x: 140, yBase: 454, count: 2 },
+          { x: 310, yBase: 454, count: 2 },
+          { x: 810, yBase: 454, count: 2 },
+          { x: 980, yBase: 454, count: 2 }
+        ],
+        words: [
+          { id: "market", han: "菜市仔", tailo: "tshài-tshī-á", zh: "菜市場", ok: true, note: "符合「場所」主題。", dict: "https://sutian.moe.edu.tw/zh-hant/su/8939/" },
+          { id: "chair", han: "椅仔", tailo: "í-á", zh: "椅子", ok: false, note: "不屬於「場所」。", dict: "https://sutian.moe.edu.tw/zh-hant/su/8492/" },
+          { id: "farm", han: "田園", tailo: "tshân-hn̂g", zh: "農田", ok: true, note: "符合「場所」主題。", dict: "https://sutian.moe.edu.tw/zh-hant/su/1971/" },
+          { id: "pot", han: "鼎", tailo: "tiánn", zh: "大鍋", ok: false, note: "不屬於「場所」。", dict: "https://sutian.moe.edu.tw/zh-hant/su/10354/" },
+          { id: "dad", han: "阿爸", tailo: "a-pah", zh: "爸爸", ok: false, note: "不屬於「場所」。", dict: "https://sutian.moe.edu.tw/zh-hant/su/4558/" },
+          { id: "house", han: "厝", tailo: "tshù", zh: "房屋、家", ok: true, note: "符合「場所」主題。", dict: "https://sutian.moe.edu.tw/zh-hant/su/5790/" },
+          { id: "banana", han: "弓蕉", tailo: "king-tsio", zh: "香蕉", ok: false, note: "不屬於「場所」。", dict: "https://sutian.moe.edu.tw/zh-hant/su/529/" },
+          { id: "station", han: "車頭", tailo: "tshia-thâu", zh: "車站", ok: true, note: "符合「場所」主題。", dict: "https://sutian.moe.edu.tw/zh-hant/su/3505/" }
+        ]
+      },
+      {
+        index: 10,
+        code: "11",
+        title: "繽紛色彩",
+        isColorLevel: true,
+        layoutName: "彩虹慶典臺 · 歡樂糖果塔",
+        dir: "right",
+        birdPos: { x: 135, y: 472 },
+        defaultAngle: 36,
+        defaultPower: 58,
+        prompt: "打中所有表示「顏色」的語詞",
+        note: "🎉 歡迎來到繽紛色彩嘉年華！從 8 種台語常用顏色詞（紅、黃、青、藍、柑仔色、茄仔色、烏、白）隨機抽選出題，打中綻放彩虹煙火！",
+        stacks: [
+          { x: 430, yBase: 454, count: 3 },
+          { x: 690, yBase: 434, count: 2 },
+          { x: 950, yBase: 454, count: 3 }
+        ],
+        words: [] // 動態由 buildColorLevelWords() 產生
+      }
+    ];
+
+    // 為第 11 關產生題目（支援「認詞闖關：4顏色+4干擾」與「指定色彩神射手：8張全為顏色詞，依提示射中指定4色」）
+    let colorSubmode = "category"; // "category" | "target"
+    let targetColorQueue = [];
+    let colorSetOffset = 0;
+
+    function buildColorLevelWords() {
+      const shuffledColors = [...TAIGI_COLORS];
+      // 依 offset 輪替，確保每次按「換一組顏色題目」都能練習到不同顏色
+      const rotated = shuffledColors.slice(colorSetOffset % 8).concat(shuffledColors.slice(0, colorSetOffset % 8));
+
+      if (colorSubmode === "category") {
+        const pickedColors = rotated.slice(0, 4).map(c => ({
+          id: c.id,
+          han: c.han,
+          tailo: c.tailo,
+          zh: c.zh,
+          hex: c.hex,
+          ok: true,
+          note: c.note,
+          dict: c.dict
+        }));
+        return [...pickedColors, ...COLOR_DISTRACTORS];
+      } else {
+        // 指定色彩神射手模式：8 張標靶都是台語顏色詞！系統依序指定 4 個目標顏色
+        targetColorQueue = rotated.slice(0, 4);
+        return rotated.map(c => ({
+          id: c.id,
+          han: c.han,
+          tailo: c.tailo,
+          zh: c.zh,
+          hex: c.hex,
+          ok: true,
+          note: c.note,
+          dict: c.dict
+        }));
+      }
+    }
+
+    LEVELS[10].words = buildColorLevelWords();
+
+    // =========================================================================
+    // 3. 音效與台語語音提示（Web Audio API 歡樂慶典音效 + SpeechSynthesis）
+    // =========================================================================
+    let audioCtx = null;
+    function playFestiveSound(type) {
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === "suspended") audioCtx.resume();
+        const now = audioCtx.currentTime;
+
+        if (type === "shoot") {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(220, now);
+          osc.frequency.exponentialRampToValueAtTime(580, now + 0.16);
+          gain.gain.setValueAtTime(0.15, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+          osc.connect(gain).connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 0.18);
+        } else if (type === "hit-ok") {
+          // 歡樂大三和弦琶音
+          [523.25, 659.25, 783.99, 1046.5].forEach((freq, idx) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = "triangle";
+            osc.frequency.setValueAtTime(freq, now + idx * 0.06);
+            gain.gain.setValueAtTime(0.18, now + idx * 0.06);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.06 + 0.28);
+            osc.connect(gain).connect(audioCtx.destination);
+            osc.start(now + idx * 0.06);
+            osc.stop(now + idx * 0.06 + 0.29);
+          });
+        } else if (type === "hit-wrong") {
+          [240, 180].forEach((freq, idx) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = "sawtooth";
+            osc.frequency.setValueAtTime(freq, now + idx * 0.1);
+            gain.gain.setValueAtTime(0.12, now + idx * 0.1);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.1 + 0.22);
+            osc.connect(gain).connect(audioCtx.destination);
+            osc.start(now + idx * 0.1);
+            osc.stop(now + idx * 0.1 + 0.24);
+          });
+        } else if (type === "clear") {
+          [523.25, 659.25, 783.99, 987.77, 1046.5].forEach((freq, idx) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = "triangle";
+            osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+            gain.gain.setValueAtTime(0.2, now + idx * 0.08);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.4);
+            osc.connect(gain).connect(audioCtx.destination);
+            osc.start(now + idx * 0.08);
+            osc.stop(now + idx * 0.08 + 0.42);
+          });
+        }
+      } catch (e) {}
+    }
+
+    // =========================================================================
+    // 4. 繽紛紙花煙火粒子系統（Confetti）
+    // =========================================================================
+    const confettiCanvas = document.getElementById("confetti-canvas");
+    const confettiCtx = confettiCanvas.getContext("2d");
+    let confettiParticles = [];
+    let confettiAnimId = null;
+
+    function resizeConfetti() {
+      const rect = confettiCanvas.parentElement.getBoundingClientRect();
+      confettiCanvas.width = rect.width || 1191;
+      confettiCanvas.height = rect.height || 560;
+    }
+    window.addEventListener("resize", resizeConfetti);
+
+    function spawnConfetti(xNorm, yNorm, mainHex, count = 48) {
+      resizeConfetti();
+      const palette = mainHex
+        ? [mainHex, "#ff477e", "#ffd166", "#06d6a0", "#4cc9f0", "#9b5de5", "#ff924c"]
+        : ["#ff477e", "#ff9e00", "#ffd166", "#06d6a0", "#118ab2", "#9b5de5", "#ff6392"];
+      const cx = (xNorm / 1191.333) * confettiCanvas.width;
+      const cy = (yNorm / 560) * confettiCanvas.height;
+
+      for (let i = 0; i < count; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const speed = 2.5 + Math.random() * 7.5;
+        confettiParticles.push({
+          x: cx,
+          y: cy,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed - 3.2,
+          size: 5 + Math.random() * 6,
+          color: palette[i % palette.length],
+          rot: Math.random() * Math.PI * 2,
+          vRot: (Math.random() - 0.5) * 0.25,
+          shape: i % 3, // 0: rect, 1: circle, 2: star
+          life: 1
+        });
+      }
+      if (!confettiAnimId) animateConfetti();
+    }
+
+    function animateConfetti() {
+      confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+      confettiParticles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.18;
+        p.rot += p.vRot;
+        p.life -= 0.014;
+
+        confettiCtx.save();
+        confettiCtx.translate(p.x, p.y);
+        confettiCtx.rotate(p.rot);
+        confettiCtx.globalAlpha = Math.max(0, p.life);
+        confettiCtx.fillStyle = p.color;
+        if (p.shape === 0) {
+          confettiCtx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.65);
+        } else if (p.shape === 1) {
+          confettiCtx.beginPath();
+          confettiCtx.arc(0, 0, p.size * 0.45, 0, Math.PI * 2);
+          confettiCtx.fill();
+        } else {
+          confettiCtx.fillRect(-p.size * 0.6, -2, p.size * 1.2, 4);
+          confettiCtx.fillRect(-2, -p.size * 0.6, 4, p.size * 1.2);
+        }
+        confettiCtx.restore();
+      });
+
+      confettiParticles = confettiParticles.filter(p => p.life > 0 && p.y < confettiCanvas.height + 30);
+      if (confettiParticles.length > 0) {
+        confettiAnimId = requestAnimationFrame(animateConfetti);
+      } else {
+        confettiAnimId = null;
+        confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+      }
+    }
+
+    // =========================================================================
+    // 5. 遊戲狀態與場景繪製（含繽紛花俏嘉年華背景 SVG）
+    // =========================================================================
+    let gameMode = "single"; // "campaign" | "single"
+    let currentLevelIdx = 10; // 預設直接展示第 11 關「繽紛色彩」學習關卡
+    let totalScore = 0;
+    let roundScore = 0;
+    let correctHits = 0;
+    let targetColorStepIdx = 0;
+    let levelLimits = new Array(LEVELS.length).fill(75);
+    let remainingSec = 75;
+    let timerId = null;
+    let isRunning = false;
+    let isPaused = false;
+    let activeTargets = [];
+    let flyingBird = null;
+    let isDragging = false;
+
+    const W = 1191.3333740234375;
+    const H = 560;
+
+    function showToast(msg, duration = 2300) {
+      const el = document.getElementById("toast-banner");
+      el.textContent = msg;
+      el.classList.add("visible");
+      clearTimeout(el._hideTimer);
+      el._hideTimer = setTimeout(() => el.classList.remove("visible"), duration);
+    }
+
+    function renderBirdSvg(isFestive, dir) {
+      const birdSvg = document.getElementById("bird-svg");
+      const flip = dir === "left" ? -1 : 1;
+      birdSvg.style.transform = `scaleX(${flip})`;
+      if (isFestive) {
+        // 戴著繽紛嘉年華皇冠與彩色尾羽的喜悅小鳥
+        birdSvg.innerHTML = `
+          <path d="M18 13 L14 1 L25 9 L32 0 L38 9 L47 2 L42 14 Z" fill="#ffd166" stroke="#e85d04" stroke-width="1.5"/>
+          <circle cx="14" cy="1.5" r="2.2" fill="#ff477e"/>
+          <circle cx="32" cy="0.8" r="2.4" fill="#06d6a0"/>
+          <circle cx="47" cy="2" r="2.2" fill="#3a86ff"/>
+          <path d="M10 39 1 30 8 29 3 21 17 26" fill="#9b5de5"/>
+          <ellipse cx="32" cy="35" rx="24" ry="22" fill="#ff477e"/>
+          <ellipse cx="30" cy="43" rx="15" ry="11.5" fill="#fff3b0"/>
+          <path d="m48 29 15 6-15 5" fill="#ff9e00"/>
+          <circle cx="41" cy="27" r="7.2" fill="#ffffff"/>
+          <circle cx="43" cy="27" r="3.2" fill="#2b2d42"/>
+          <circle cx="44.2" cy="25.5" r="1.2" fill="#ffffff"/>
+          <ellipse cx="35" cy="34" rx="4.2" ry="2.5" fill="#ff8fab"/>
+          <path d="M14 34q7-5 14 2-3 9-11 9" fill="#ffbe0b"/>
+        `;
+      } else {
+        birdSvg.innerHTML = `
+          <path d="M22 11 20 2 29 9 35 1 37 12" fill="#deaa52"></path>
+          <path d="M10 39 1 30 8 29 3 21 17 26" fill="#344f46"></path>
+          <ellipse cx="32" cy="34" rx="24" ry="23" fill="#344f46"></ellipse>
+          <ellipse cx="30" cy="42" rx="15" ry="12" fill="#e9dfc4"></ellipse>
+          <path d="m48 29 15 6-15 5" fill="#e9a43d"></path>
+          <circle cx="41" cy="26" r="7" fill="#fffdf6"></circle>
+          <circle cx="43" cy="26" r="3" fill="#293f38"></circle>
+          <path d="m35 16 12 3" fill="none" stroke="#293f38" stroke-width="4" stroke-linecap="round"></path>
+          <path d="M15 33q7-4 13 2-3 9-10 9" fill="#4f6b54"></path>
+        `;
+      }
+    }
+
+    function renderLandscape(level) {
+      const svg = document.getElementById("landscape");
+      const useFestive = level.isColorLevel || document.getElementById("festive-bg-toggle").checked;
+      document.body.classList.toggle("festive-theme", useFestive);
+
+      const cardSize = document.getElementById("target-size").value === "large" ? 94 : 82;
+      const platPads = level.stacks.map(st => {
+        const px = st.x - 8;
+        const pw = cardSize + 16;
+        const py = st.yBase + cardSize + 2;
+        return { x: px, y: py, w: pw };
+      });
+
+      if (useFestive) {
+        // 素面柔和彩色漸層背景（清爽不干擾視線，保留明亮喜悅的色彩感）
+        const cleanPlatforms = platPads.map((p, i) => {
+          const hues = ["#ff6b8b", "#ffb703", "#2ec4b6", "#8338ec"];
+          const c = hues[i % hues.length];
+          return `<rect x="${p.x}" y="${p.y}" width="${p.w}" height="10" rx="5" fill="${c}"/>`;
+        }).join("");
+
+        svg.innerHTML = `
+          <defs>
+            <linearGradient id="festive-plain-bg" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#ffe5ec"/>
+              <stop offset="33%" stop-color="#fff3cc"/>
+              <stop offset="66%" stop-color="#dcf7f3"/>
+              <stop offset="100%" stop-color="#ede2ff"/>
+            </linearGradient>
+            <linearGradient id="festive-plain-ground" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#ff8fab"/>
+              <stop offset="35%" stop-color="#ffd166"/>
+              <stop offset="70%" stop-color="#64dfdf"/>
+              <stop offset="100%" stop-color="#b892ff"/>
+            </linearGradient>
+          </defs>
+
+          <!-- 素面柔和彩色背景 -->
+          <rect width="${W}" height="${H}" fill="url(#festive-plain-bg)"/>
+
+          <!-- 極簡彩色地平線與標靶底座 -->
+          <rect x="0" y="536" width="${W}" height="24" fill="url(#festive-plain-ground)"/>
+          ${cleanPlatforms}
+        `;
+      } else {
+        // 原本典雅草木綠背景
+        const woodPlatforms = platPads.map(p => `
+          <g>
+            <rect x="${p.x}" y="${p.y}" width="${p.w}" height="9" rx="3" fill="#9b8159"></rect>
+            <path d="M${p.x + 5} ${p.y + 2}h${p.w - 10}" stroke="#c4ab7d" stroke-width="2"></path>
+          </g>
+        `).join("");
+
+        svg.innerHTML = `
+          <defs>
+            <linearGradient id="sky" x2="0" y2="1">
+              <stop stop-color="#eaf0e0"></stop>
+              <stop offset="1" stop-color="#f2f1df"></stop>
+            </linearGradient>
+            <linearGradient id="soil" x2="0" y2="1">
+              <stop stop-color="#adb983"></stop>
+              <stop offset="1" stop-color="#8a9e6e"></stop>
+            </linearGradient>
+          </defs>
+          <rect width="${W}" height="${H}" fill="url(#sky)"></rect>
+          <circle cx="274" cy="162" r="59" fill="#f9f1ce"></circle>
+          <path d="M0 392Q214 168 476 397Q833 168 1191.33 386.4V560H0Z" fill="#dbe3c9"></path>
+          <path d="M0 459.2Q262 285.6 583.75 459.2Q941 302.4 1191.33 442.4V560H0Z" fill="#cad7b4"></path>
+          <g transform="translate(32.16 536) scale(1.5)">
+            <path d="M-3 0h6v-89h-6" fill="#a8b18b"></path>
+            <path d="M0-178-38-116h15l-29 44h18l-26 44H60L34-72h18l-29-44h15z" fill="#b6c8a0"></path>
+          </g>
+          <g transform="translate(339.5 535) scale(0.8)">
+            <path d="M-3 0h6v-89h-6" fill="#a8b18b"></path>
+            <path d="M0-178-38-116h15l-29 44h18l-26 44H60L34-72h18l-29-44h15z" fill="#c2ceab"></path>
+          </g>
+          <g transform="translate(1167.5 535) scale(0.65)">
+            <path d="M-3 0h6v-89h-6" fill="#a8b18b"></path>
+            <path d="M0-178-38-116h15l-29 44h18l-26 44H60L34-72h18l-29-44h15z" fill="#bccda5"></path>
+          </g>
+          <path d="M0 536Q214 518 405 536T1191.33 539V560H0Z" fill="url(#soil)"></path>
+          <path d="M0 547Q416 535 833 550T1191.33 546" fill="none" stroke="#c5cdaa" stroke-width="2"></path>
+          ${woodPlatforms}
+        `;
+      }
+    }
+
+    // =========================================================================
+    // 6. 彈弓、拋物線軌跡與標靶堆疊邏輯
+    // =========================================================================
+    function getVelocity(dir, angleDeg, powerPct) {
+      const rad = (angleDeg * Math.PI) / 180;
+      const speed = 7.2 + (powerPct / 100) * 14.5;
+      const sign = dir === "left" ? -1 : 1;
+      return {
+        vx: sign * Math.cos(rad) * speed,
+        vy: -Math.sin(rad) * speed,
+        gravity: 0.34
+      };
+    }
+
+    function updateSlingshotAndBird(customBirdPos = null) {
+      const level = LEVELS[currentLevelIdx];
+      const anchor = level.birdPos;
+      const dir = document.getElementById("dir-select").value;
+      const angleDeg = Number(document.getElementById("angle-slider").value);
+      const powerPct = Number(document.getElementById("power-slider").value);
+      const useFestive = level.isColorLevel || document.getElementById("festive-bg-toggle").checked;
+
+      renderBirdSvg(useFestive, dir);
+
+      // 計算小鳥位置（若未飛行，依拉弓角度與力道微調預備位置）
+      let bx = anchor.x;
+      let by = anchor.y;
+      if (customBirdPos) {
+        bx = customBirdPos.x;
+        by = customBirdPos.y;
+      } else if (!flyingBird) {
+        const pullDist = (powerPct / 100) * 28;
+        const rad = (angleDeg * Math.PI) / 180;
+        const sign = dir === "left" ? 1 : -1;
+        bx = anchor.x + sign * Math.cos(rad) * pullDist;
+        by = anchor.y + Math.sin(rad) * pullDist;
+      }
+
+      const arena = document.getElementById("arena");
+      const rect = arena.getBoundingClientRect();
+      const scaleX = (rect.width || W) / W;
+      const scaleY = (rect.height || H) / H;
+
+      const birdBtn = document.getElementById("bird");
+      birdBtn.style.left = `${(bx - 24) * scaleX}px`;
+      birdBtn.style.top = `${(by - 24) * scaleY}px`;
+
+      // 彈弓木架
+      const wood = document.getElementById("slingshot-wood");
+      const baseTop = anchor.y;
+      const baseBottom = 538;
+      wood.innerHTML = `
+        <rect x="${anchor.x - 28}" y="${baseBottom - 6}" width="56" height="8" rx="4" fill="${useFestive ? '#ff7b00' : '#8d6e48'}"/>
+        <path d="M${anchor.x} ${baseBottom - 4} V${baseTop + 10} M${anchor.x - 10} ${baseTop - 6} L${anchor.x} ${baseTop + 12} L${anchor.x + 10} ${baseTop - 6}"
+              stroke="${useFestive ? '#d93870' : '#7b5d3b'}" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      `;
+
+      // 橡皮筋與軌跡
+      const bandBack = document.getElementById("band-back");
+      const bandFront = document.getElementById("band-front");
+      const traj = document.getElementById("trajectory");
+      const shadow = document.getElementById("bird-shadow");
+
+      shadow.setAttribute("cx", bx);
+      shadow.setAttribute("cy", 535);
+
+      if (!flyingBird) {
+        bandBack.setAttribute("d", `M${anchor.x - 9},${anchor.y - 4} L${bx},${by}`);
+        bandFront.setAttribute("d", `M${anchor.x + 9},${anchor.y - 4} L${bx},${by}`);
+
+        const { vx, vy, gravity } = getVelocity(dir, angleDeg, powerPct);
+        let px = anchor.x;
+        let py = anchor.y;
+        let pvy = vy;
+        const pts = [`M${px.toFixed(1)},${py.toFixed(1)}`];
+        for (let step = 0; step < 26; step++) {
+          px += vx * 1.6;
+          py += pvy * 1.6;
+          pvy += gravity * 1.6;
+          if (py > 540 || px < 0 || px > W) break;
+          pts.push(`L${px.toFixed(1)},${py.toFixed(1)}`);
+        }
+        traj.setAttribute("d", pts.join(" "));
+        traj.setAttribute("stroke", useFestive ? "#ff477e" : "#6c8463");
+      } else {
+        bandBack.setAttribute("d", "");
+        bandFront.setAttribute("d", "");
+      }
+    }
+
+    function shuffle(arr) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function updateStageHeaderPrompt() {
+      const level = LEVELS[currentLevelIdx];
+      document.getElementById("round-badge").textContent = level.code;
+      document.getElementById("stage-kicker").textContent = `第 ${currentLevelIdx + 1} / ${LEVELS.length} 關 · ${level.title}`;
+      document.getElementById("layout-label").textContent = `${level.layoutName} · ${level.dir === "left" ? "向左發射 ←" : "向右發射 →"}`;
+      document.getElementById("stage-note").textContent = level.note;
+
+      const promptEl = document.getElementById("stage-prompt");
+      if (level.isColorLevel && colorSubmode === "target" && targetColorQueue[targetColorStepIdx]) {
+        const tc = targetColorQueue[targetColorStepIdx];
+        promptEl.innerHTML = `🎯 指定色彩神射手：請打中「<span style="color:${tc.hex === '#f8f9fa' ? '#495057' : tc.hex}">${tc.zh}</span>」的台語語詞 <span class="target-color-dot" style="background:${tc.hex}"></span>（第 ${targetColorStepIdx + 1} / 4 題）`;
+      } else {
+        promptEl.textContent = level.prompt;
+      }
+
+      document.getElementById("total-score").textContent = totalScore;
+      document.getElementById("round-score").textContent = roundScore;
+      document.getElementById("hit-progress").innerHTML = `${correctHits} <span style="font-size:14px;font-weight:500;color:var(--muted)">/ 4</span>`;
+      document.getElementById("timer-readout").textContent = remainingSec;
+    }
+
+    function renderTargets() {
+      const container = document.getElementById("targets");
+      const isLarge = document.getElementById("target-size").value === "large";
+      const cw = isLarge ? 94 : 82;
+      const ch = isLarge ? 92 : 82;
+      const gap = 3;
+
+      const arena = document.getElementById("arena");
+      const rect = arena.getBoundingClientRect();
+      const scaleX = (rect.width || W) / W;
+      const scaleY = (rect.height || H) / H;
+
+      container.innerHTML = "";
+      activeTargets.forEach((t, idx) => {
+        if (t.hit) return;
+        const st = LEVELS[currentLevelIdx].stacks[t.stackIdx];
+        const x = st.x - (isLarge ? 6 : 0);
+        const y = st.yBase - t.tier * (ch + gap) - (isLarge ? 10 : 0);
+        t.x = x;
+        t.y = y;
+        t.w = cw;
+        t.h = ch;
+
+        const el = document.createElement("div");
+        el.className = "target";
+        el.dataset.wordId = t.word.id;
+        el.dataset.stack = t.stackIdx;
+        el.dataset.tier = t.tier;
+        el.dataset.festiveBorder = idx % 8;
+        el.style.left = `${x * scaleX}px`;
+        el.style.top = `${y * scaleY}px`;
+        el.style.width = `${cw * scaleX}px`;
+        el.style.height = `${ch * scaleY}px`;
+
+        const swatchHtml = t.word.hex
+          ? `<span class="color-hint-pill" style="background:${t.word.hex}"></span>`
+          : "";
+
+        el.innerHTML = `
+          ${swatchHtml}
+          <span class="word-han">${t.word.han}</span>
+          <span class="word-tailo" lang="nan-Latn">${t.word.tailo}</span>
+          <span class="word-chinese">${t.word.zh}</span>
+        `;
+        t.el = el;
+        container.appendChild(el);
+      });
+    }
+
+    function loadLevel(idx, resetCampaignScore = false) {
+      clearInterval(timerId);
+      timerId = null;
+      flyingBird = null;
+      isRunning = false;
+      isPaused = false;
+
+      currentLevelIdx = idx;
+      if (resetCampaignScore) totalScore = 0;
+      roundScore = 0;
+      correctHits = 0;
+      targetColorStepIdx = 0;
+
+      if (LEVELS[idx].isColorLevel) {
+        LEVELS[idx].words = buildColorLevelWords();
+      }
+
+      const level = LEVELS[idx];
+      remainingSec = levelLimits[idx];
+
+      document.getElementById("dir-select").value = level.dir;
+      document.getElementById("angle-slider").value = level.defaultAngle;
+      document.getElementById("angle-val").textContent = `${level.defaultAngle}°`;
+      document.getElementById("power-slider").value = level.defaultPower;
+      document.getElementById("power-val").textContent = `${level.defaultPower}%`;
+
+      // 洗牌配置字卡到各個 stack
+      const shuffled = shuffle(level.words);
+      activeTargets = [];
+      let wordCursor = 0;
+      level.stacks.forEach((st, sIdx) => {
+        for (let tier = 0; tier < st.count; tier++) {
+          const w = shuffled[wordCursor++ % shuffled.length];
+          activeTargets.push({
+            stackIdx: sIdx,
+            tier,
+            word: w,
+            hit: false
+          });
+        }
+      });
+
+      renderRoundProgress();
+      renderLandscape(level);
+      updateStageHeaderPrompt();
+      renderTargets();
+      updateSlingshotAndBird();
+
+      // 同步題庫下拉選單
+      document.getElementById("bank-level-select").value = String(idx);
+      renderTeacherBank(idx);
+    }
+
+    // =========================================================================
+    // 7. 發射與碰撞判定（打掉下層字卡，上層自動落下補位）
+    // =========================================================================
+    function shootBird() {
+      if (flyingBird) return;
+      playFestiveSound("shoot");
+
+      const level = LEVELS[currentLevelIdx];
+      const dir = document.getElementById("dir-select").value;
+      const angleDeg = Number(document.getElementById("angle-slider").value);
+      const powerPct = Number(document.getElementById("power-slider").value);
+      const { vx, vy, gravity } = getVelocity(dir, angleDeg, powerPct);
+
+      flyingBird = {
+        x: level.birdPos.x,
+        y: level.birdPos.y,
+        vx,
+        vy,
+        gravity
+      };
+
+      function stepFlight() {
+        if (!flyingBird) return;
+        flyingBird.x += flyingBird.vx;
+        flyingBird.y += flyingBird.vy;
+        flyingBird.vy += flyingBird.gravity;
+
+        updateSlingshotAndBird({ x: flyingBird.x, y: flyingBird.y });
+
+        // 檢查是否命中任一標靶
+        const hitTarget = activeTargets.find(t =>
+          !t.hit &&
+          flyingBird.x + 16 >= t.x &&
+          flyingBird.x - 16 <= t.x + t.w &&
+          flyingBird.y + 16 >= t.y &&
+          flyingBird.y - 16 <= t.y + t.h
+        );
+
+        if (hitTarget) {
+          handleTargetHit(hitTarget);
+          flyingBird = null;
+          setTimeout(() => updateSlingshotAndBird(), 260);
+          return;
+        }
+
+        // 出界或落地
+        if (flyingBird.y > 545 || flyingBird.x < -30 || flyingBird.x > W + 30) {
+          flyingBird = null;
+          updateSlingshotAndBird();
+          return;
+        }
+
+        requestAnimationFrame(stepFlight);
+      }
+
+      requestAnimationFrame(stepFlight);
+    }
+
+    function handleTargetHit(target) {
+      const level = LEVELS[currentLevelIdx];
+      const w = target.word;
+      let isCorrect = w.ok;
+
+      // 若是第 11 關的「指定色彩神射手」模式，需檢查是否為當前指定的顏色
+      if (level.isColorLevel && colorSubmode === "target") {
+        const expected = targetColorQueue[targetColorStepIdx];
+        isCorrect = expected && w.id === expected.id;
+      }
+
+      target.hit = true;
+      if (target.el) {
+        target.el.classList.add(isCorrect ? "hit-correct" : "hit-wrong");
+      }
+
+      if (isCorrect) {
+        totalScore += 1;
+        roundScore += 1;
+        correctHits += 1;
+        targetColorStepIdx += 1;
+        playFestiveSound("hit-ok");
+        spawnConfetti(target.x + target.w / 2, target.y + target.h / 2, w.hex, 55);
+        showToast(`🎉 答對＋1 分！「${w.han}（${w.tailo}）」＝ ${w.zh}`);
+      } else {
+        totalScore -= 1;
+        roundScore -= 1;
+        playFestiveSound("hit-wrong");
+        showToast(`💥 打錯－1 分！「${w.han}（${w.tailo}）」是「${w.zh}」`);
+      }
+
+      // 同 stack 上方字卡往下遞補一層（補位不計分）
+      activeTargets.forEach(t => {
+        if (!t.hit && t.stackIdx === target.stackIdx && t.tier > target.tier) {
+          t.tier -= 1;
+        }
+      });
+
+      // 若打錯的是正確答案（例如指定顏色模式誤擊下一個目標色），在該疊最上方補回一張以確保可過關
+      if (!isCorrect && w.ok) {
+        const remainingInStack = activeTargets.filter(t => !t.hit && t.stackIdx === target.stackIdx).length;
+        activeTargets.push({
+          stackIdx: target.stackIdx,
+          tier: remainingInStack,
+          word: w,
+          hit: false
+        });
+      }
+
+      updateStageHeaderPrompt();
+      setTimeout(() => {
+        renderTargets();
+        if (correctHits >= 4) {
+          playFestiveSound("clear");
+          spawnConfetti(W * 0.3, 220, "#ff477e", 70);
+          spawnConfetti(W * 0.7, 220, "#ffd100", 70);
+          clearInterval(timerId);
+          timerId = null;
+          isRunning = false;
+
+          if (gameMode === "campaign" && currentLevelIdx < LEVELS.length - 1) {
+            showToast(`🎊 恭喜過關！3 秒後進入下一關⋯`, 2800);
+            setTimeout(() => {
+              loadLevel(currentLevelIdx + 1, false);
+              startTimer();
+            }, 3000);
+          } else {
+            showToast(`🏆 太棒了！完成「${level.title}」全部 4 個目標語詞！累計 ${totalScore} 分！`, 4000);
+          }
+        }
+      }, 220);
+    }
+
+    // =========================================================================
+    // 8. 滑鼠／觸控直接拖曳小鳥拉弓 + 鍵盤與計時器
+    // =========================================================================
+    const birdBtn = document.getElementById("bird");
+    const arenaEl = document.getElementById("arena");
+
+    birdBtn.addEventListener("pointerdown", e => {
+      if (flyingBird) return;
+      isDragging = true;
+      birdBtn.setPointerCapture(e.pointerId);
+    });
+
+    window.addEventListener("pointermove", e => {
+      if (!isDragging) return;
+      const rect = arenaEl.getBoundingClientRect();
+      const mx = ((e.clientX - rect.left) / rect.width) * W;
+      const my = ((e.clientY - rect.top) / rect.height) * H;
+      const anchor = LEVELS[currentLevelIdx].birdPos;
+      const dir = document.getElementById("dir-select").value;
+
+      // 往發射反方向拉弓
+      const dx = dir === "right" ? anchor.x - mx : mx - anchor.x;
+      const dy = my - anchor.y;
+      const dist = Math.min(95, Math.max(12, Math.hypot(dx, dy)));
+      const power = Math.round(Math.min(100, Math.max(15, (dist / 90) * 100)));
+      const angle = Math.round(Math.max(-88, Math.min(88, (Math.atan2(dy, Math.max(8, dx)) * 180) / Math.PI)));
+
+      document.getElementById("angle-slider").value = angle;
+      document.getElementById("angle-val").textContent = `${angle}°`;
+      document.getElementById("power-slider").value = power;
+      document.getElementById("power-val").textContent = `${power}%`;
+      updateSlingshotAndBird();
+    });
+
+    window.addEventListener("pointerup", () => {
+      if (!isDragging) return;
+      isDragging = false;
+      shootBird();
+    });
+
+    function startTimer() {
+      clearInterval(timerId);
+      isRunning = true;
+      isPaused = false;
+      document.getElementById("pause-btn").disabled = false;
+      document.getElementById("pause-btn").textContent = "暫停";
+
+      if (levelLimits[currentLevelIdx] === 0) {
+        document.getElementById("timer-readout").textContent = "∞";
+        return;
+      }
+
+      timerId = setInterval(() => {
+        if (isPaused) return;
+        remainingSec -= 1;
+        document.getElementById("timer-readout").textContent = Math.max(0, remainingSec);
+        if (remainingSec <= 0) {
+          clearInterval(timerId);
+          timerId = null;
+          isRunning = false;
+          showToast("⏰ 時間到！按「從頭重玩」可再次挑戰本關。", 3500);
+        }
+      }, 1000);
+    }
+
+    // =========================================================================
+    // 9. 初始化介面元件（進度列、色彩圖鑑、排列預覽、計時設定、教師題庫）
+    // =========================================================================
+    function renderRoundProgress() {
+      const ol = document.getElementById("round-progress");
+      ol.innerHTML = LEVELS.map((lv, idx) => `
+        <li class="${idx === currentLevelIdx ? 'current' : ''} ${lv.isColorLevel ? 'color-step' : ''}"
+            data-idx="${idx}" aria-current="${idx === currentLevelIdx ? 'step' : 'false'}">
+          <span>${lv.code}</span>
+          <small>${lv.isColorLevel ? '🌈 ' + lv.title : lv.title}</small>
+        </li>
+      `).join("");
+
+      ol.querySelectorAll("li").forEach(li => {
+        li.addEventListener("click", () => {
+          const idx = Number(li.dataset.idx);
+          document.getElementById("level-select").value = String(idx);
+          gameMode = "single";
+          loadLevel(idx, false);
+        });
+      });
+    }
+
+    function renderColorPaletteStrip() {
+      const strip = document.getElementById("color-palette-strip");
+      strip.innerHTML = TAIGI_COLORS.map(c => `
+        <button type="button" class="color-chip" data-id="${c.id}">
+          <span class="color-swatch" style="background:${c.hex}"></span>
+          <span class="color-chip-info">
+            <b>${c.han}</b>
+            <span>${c.tailo} · ${c.zh}</span>
+          </span>
+        </button>
+      `).join("");
+
+      strip.querySelectorAll(".color-chip").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const c = TAIGI_COLORS.find(item => item.id === btn.dataset.id);
+          if (!c) return;
+          playFestiveSound("hit-ok");
+          spawnConfetti(W * 0.5, 180, c.hex, 32);
+          showToast(`🎨 【${c.han} ${c.tailo}】(${c.zh})：${c.note}`, 3800);
+        });
+      });
+    }
+
+    function renderLayoutGallery() {
+      const gallery = document.getElementById("layout-gallery");
+      gallery.innerHTML = LEVELS.map((lv, idx) => {
+        const rects = lv.stacks.flatMap(st =>
+          Array.from({ length: st.count }, (_, tier) => {
+            const y = st.yBase - tier * 85;
+            const fill = lv.isColorLevel ? ["#ffccd5", "#fff3b0", "#c7f9cc", "#cdeac0", "#e0c3fc"][tier % 5] : "#fff9df";
+            const stroke = lv.isColorLevel ? "#ff477e" : "#7e9770";
+            return `<rect x="${st.x}" y="${y}" width="82" height="82" rx="6" fill="${fill}" stroke="${stroke}" stroke-width="4"/>`;
+          })
+        ).join("");
+
+        return `
+          <figure class="layout-card ${lv.isColorLevel ? 'color-layout-card' : ''}" data-idx="${idx}">
+            <figcaption>
+              <b>${lv.code} · ${lv.isColorLevel ? '🌈 ' + lv.title : lv.title}</b>
+              <small>${lv.layoutName} ${lv.dir === 'left' ? '←' : '→'}</small>
+            </figcaption>
+            <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${lv.title} 排列預覽">
+              <path d="M0 540H${W}" stroke="${lv.isColorLevel ? '#ff85a1' : '#a9b58b'}" stroke-width="10"/>
+              <circle cx="${lv.birdPos.x}" cy="${lv.birdPos.y}" r="22" fill="${lv.isColorLevel ? '#ff477e' : '#355546'}"/>
+              ${rects}
+            </svg>
+          </figure>
+        `;
+      }).join("");
+
+      gallery.querySelectorAll(".layout-card").forEach(card => {
+        card.addEventListener("click", () => {
+          const idx = Number(card.dataset.idx);
+          document.getElementById("level-select").value = String(idx);
+          gameMode = "single";
+          loadLevel(idx, false);
+        });
+      });
+    }
+
+    function renderTimeInputs() {
+      const wrap = document.getElementById("time-inputs");
+      wrap.innerHTML = LEVELS.map((lv, idx) => `
+        <label class="time-card" for="limit-${idx}">
+          <span><b>${lv.code}</b> ${lv.title}<small>${lv.layoutName.split(" · ")[0]}</small></span>
+          <span class="seconds-input">
+            <input id="limit-${idx}" type="number" min="0" max="600" step="1" value="${levelLimits[idx]}">
+            <small>秒</small>
+          </span>
+        </label>
+      `).join("");
+
+      wrap.querySelectorAll("input").forEach((inp, idx) => {
+        inp.addEventListener("change", () => {
+          const v = Math.max(0, Math.min(600, parseInt(inp.value || "75", 10)));
+          inp.value = v;
+          levelLimits[idx] = v;
+          if (idx === currentLevelIdx && !isRunning) {
+            remainingSec = v;
+            document.getElementById("timer-readout").textContent = v;
+          }
+        });
+      });
+    }
+
+    function renderTeacherBank(idx) {
+      const lv = LEVELS[idx];
+      document.getElementById("bank-level-note").textContent = lv.note;
+      const tbody = document.getElementById("bank-tbody");
+
+      // 若是第 11 關，完整列出 8 個台語顏色詞＋4 個干擾詞供教師檢視
+      const rowsData = lv.isColorLevel
+        ? [
+            ...TAIGI_COLORS.map(c => ({ han: c.han, tailo: c.tailo, zh: c.zh, ok: true, hex: c.hex, note: c.note, dict: c.dict })),
+            ...COLOR_DISTRACTORS
+          ]
+        : lv.words;
+
+      tbody.innerHTML = rowsData.map(w => `
+        <tr>
+          <td>
+            ${w.hex ? `<span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:${w.hex};border:1px solid #999;margin-right:5px;vertical-align:middle;"></span>` : ""}
+            <b>${w.han}</b>
+          </td>
+          <td lang="nan-Latn">${w.tailo}</td>
+          <td>${w.zh}</td>
+          <td><span class="ans-badge ${w.ok ? 'ans-ok' : 'ans-no'}">${w.ok ? '正確 ＋1' : '干擾 －1'}</span></td>
+          <td>${w.note}</td>
+          <td><a href="${w.dict}" target="_blank" rel="noopener">教育部辭典 ↗</a></td>
+        </tr>
+      `).join("");
+    }
+
+    // 綁定控制項事件
+    document.getElementById("level-select").addEventListener("change", e => {
+      const val = e.target.value;
+      if (val === "campaign") {
+        gameMode = "campaign";
+        document.getElementById("mode-hint").textContent = "十一關挑戰：從第 1 關依序闖關至第 11 關「繽紛色彩」！";
+        loadLevel(0, true);
+      } else {
+        gameMode = "single";
+        const idx = Number(val);
+        document.getElementById("mode-hint").textContent = `單關試玩：第 ${idx + 1} 關「${LEVELS[idx].title}」。`;
+        loadLevel(idx, true);
+      }
+    });
+
+    document.getElementById("jump-color-btn").addEventListener("click", () => {
+      document.getElementById("level-select").value = "10";
+      gameMode = "single";
+      loadLevel(10, false);
+      spawnConfetti(W * 0.5, 220, "#ff477e", 65);
+      showToast("🌈 已切換至「第 11 關 · 繽紛色彩學習關卡」！");
+    });
+
+    document.getElementById("submode-category-btn").addEventListener("click", () => {
+      colorSubmode = "category";
+      document.getElementById("submode-category-btn").classList.add("active");
+      document.getElementById("submode-target-btn").classList.remove("active");
+      loadLevel(10, false);
+      showToast("🌟 已切換為「認詞闖關」：打中場上所有表示顏色的語詞！");
+    });
+
+    document.getElementById("submode-target-btn").addEventListener("click", () => {
+      colorSubmode = "target";
+      document.getElementById("submode-target-btn").classList.add("active");
+      document.getElementById("submode-category-btn").classList.remove("active");
+      loadLevel(10, false);
+      showToast("🎯 已切換為「指定色彩神射手」：請依上方標題指定的顏色射擊！");
+    });
+
+    document.getElementById("shuffle-colors-btn").addEventListener("click", () => {
+      colorSetOffset = (colorSetOffset + 2) % TAIGI_COLORS.length;
+      loadLevel(10, false);
+      spawnConfetti(W * 0.5, 220, "#06d6a0", 40);
+      showToast("🔄 已換一組台語顏色題目！");
+    });
+
+    document.getElementById("dir-select").addEventListener("change", () => updateSlingshotAndBird());
+    document.getElementById("angle-slider").addEventListener("input", e => {
+      document.getElementById("angle-val").textContent = `${e.target.value}°`;
+      updateSlingshotAndBird();
+    });
+    document.getElementById("power-slider").addEventListener("input", e => {
+      document.getElementById("power-val").textContent = `${e.target.value}%`;
+      updateSlingshotAndBird();
+    });
+
+    document.getElementById("start-btn").addEventListener("click", () => {
+      loadLevel(currentLevelIdx, false);
+      startTimer();
+      showToast("🚀 挑戰開始！瞄準正確的台語語詞發射吧！");
+    });
+    document.getElementById("shoot-btn").addEventListener("click", () => shootBird());
+    document.getElementById("pause-btn").addEventListener("click", () => {
+      if (!isRunning) return;
+      isPaused = !isPaused;
+      document.getElementById("pause-btn").textContent = isPaused ? "繼續" : "暫停";
+      showToast(isPaused ? "⏸ 遊戲已暫停" : "▶ 遊戲繼續");
+    });
+    document.getElementById("reset-btn").addEventListener("click", () => {
+      loadLevel(currentLevelIdx, true);
+      showToast("🔄 已重新洗牌開局！");
+    });
+
+    function syncHanTailoDisplay(hideHan) {
+      const hideHanCheckbox = document.getElementById("hide-han");
+      const showTailoCheckbox = document.getElementById("show-tailo");
+      const quickBtn = document.getElementById("quick-tailo-only-btn");
+      const targetsEl = document.getElementById("targets");
+      const paletteStrip = document.getElementById("color-palette-strip");
+
+      hideHanCheckbox.checked = hideHan;
+      targetsEl.classList.toggle("no-han", hideHan);
+      paletteStrip.classList.toggle("no-han", hideHan);
+
+      if (hideHan) {
+        // 隱藏漢字時，強制確保台羅開啟，避免字卡空白
+        showTailoCheckbox.checked = true;
+        targetsEl.classList.remove("no-tailo");
+        quickBtn.classList.add("active");
+        quickBtn.textContent = "🔤 已隱藏漢字（點擊恢復漢字）";
+      } else {
+        quickBtn.classList.remove("active");
+        quickBtn.textContent = "🔤 隱藏漢字（練習看羅馬字）";
+      }
+    }
+
+    document.getElementById("hide-han").addEventListener("change", e => {
+      syncHanTailoDisplay(e.target.checked);
+      showToast(e.target.checked ? "🔤 已隱藏漢字：現在字卡放大顯示台羅拼音！" : "📝 已恢復顯示台語漢字！");
+    });
+
+    document.getElementById("quick-tailo-only-btn").addEventListener("click", () => {
+      const nextState = !document.getElementById("hide-han").checked;
+      syncHanTailoDisplay(nextState);
+      showToast(nextState ? "🔤 已隱藏漢字：專注看羅馬字（台羅）射擊吧！" : "📝 已恢復顯示台語漢字！");
+    });
+
+    document.getElementById("show-tailo").addEventListener("change", e => {
+      if (!e.target.checked && document.getElementById("hide-han").checked) {
+        // 若同時取消台羅，自動恢復顯示漢字以免字卡全空
+        syncHanTailoDisplay(false);
+      }
+      document.getElementById("targets").classList.toggle("no-tailo", !e.target.checked);
+    });
+    document.getElementById("show-chinese").addEventListener("change", e => {
+      document.getElementById("targets").classList.toggle("no-chinese", !e.target.checked);
+    });
+    document.getElementById("show-swatch").addEventListener("change", e => {
+      document.getElementById("targets").classList.toggle("show-color-swatch", e.target.checked);
+    });
+    document.getElementById("festive-bg-toggle").addEventListener("change", () => {
+      renderLandscape(LEVELS[currentLevelIdx]);
+      updateSlingshotAndBird();
+    });
+    document.getElementById("target-size").addEventListener("change", e => {
+      const isLarge = e.target.value === "large";
+      document.getElementById("size-readout").textContent = isLarge ? "94 × 92 px" : "82 × 82 px";
+      renderLandscape(LEVELS[currentLevelIdx]);
+      renderTargets();
+    });
+
+    document.getElementById("reset-times-btn").addEventListener("click", () => {
+      levelLimits.fill(75);
+      renderTimeInputs();
+      remainingSec = 75;
+      document.getElementById("timer-readout").textContent = 75;
+    });
+
+    document.getElementById("open-bank-btn").addEventListener("click", () => {
+      const bank = document.getElementById("teacher-bank");
+      bank.open = true;
+      bank.scrollIntoView({ behavior: "smooth" });
+    });
+
+    // 鍵盤操作支援
+    window.addEventListener("keydown", e => {
+      if (["INPUT", "SELECT", "TEXTAREA"].includes(document.activeElement?.tagName)) return;
+      if (e.code === "Space") {
+        e.preventDefault();
+        shootBird();
+      } else if (e.code === "ArrowUp") {
+        e.preventDefault();
+        const s = document.getElementById("angle-slider");
+        s.value = Math.min(88, Number(s.value) + 2);
+        document.getElementById("angle-val").textContent = `${s.value}°`;
+        updateSlingshotAndBird();
+      } else if (e.code === "ArrowDown") {
+        e.preventDefault();
+        const s = document.getElementById("angle-slider");
+        s.value = Math.max(-88, Number(s.value) - 2);
+        document.getElementById("angle-val").textContent = `${s.value}°`;
+        updateSlingshotAndBird();
+      }
+    });
+
+    window.addEventListener("resize", () => {
+      renderTargets();
+      updateSlingshotAndBird();
+    });
+
+    // 初始化題庫選單與畫面
+    const bankSelect = document.getElementById("bank-level-select");
+    bankSelect.innerHTML = LEVELS.map((lv, idx) => `<option value="${idx}">第 ${idx + 1} 關 · ${lv.title}</option>`).join("");
+    bankSelect.addEventListener("change", e => renderTeacherBank(Number(e.target.value)));
+
+    renderColorPaletteStrip();
+    renderLayoutGallery();
+    renderTimeInputs();
+    loadLevel(10, true);
+  </script>
+</body>
+</html>
