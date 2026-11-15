@@ -374,7 +374,7 @@
       margin-top: 8px;
     }
 
-    /* 顏色學習關卡專屬：繽紛色彩圖鑑與玩法切換列 */
+    /* 顏色學習關卡專屬：繽紛色彩圖鑑與玩法切換列（僅在進入顏色學習關卡時顯示） */
     .color-learning-bar {
       display: none;
       margin-bottom: 18px;
@@ -384,7 +384,7 @@
       border: 2px dashed #ff6b9d;
       box-shadow: 0 8px 24px rgba(255, 107, 157, 0.16);
     }
-    body.festive-theme .color-learning-bar { display: block; }
+    body.color-level-active .color-learning-bar { display: block; }
     .color-bar-header {
       display: flex;
       align-items: center;
@@ -1019,7 +1019,7 @@
     footer.site-footer a { color: var(--ink); }
   </style>
 </head>
-<body class="festive-theme">
+<body>
   <header class="site-header">
     <a class="brand-link" href="#game">
       <span class="brand-icon">鳥</span>
@@ -1029,7 +1029,6 @@
       </span>
     </a>
     <div class="header-actions">
-      <button type="button" class="color-quick-btn" id="jump-color-btn">🌈 立即體驗「繽紛色彩學習關卡」✨</button>
       <span class="badge-pill">11 關・多點發射</span>
       <button type="button" class="link-btn" id="open-bank-btn">教師題庫 ↗</button>
     </div>
@@ -1040,7 +1039,7 @@
       <p class="eyebrow">TAIGI WORD ADVENTURE</p>
       <h1>
         【台語語詞憤怒鳥 - cjs 】
-        <span class="festive-tag">🎉 繽紛色彩喜悅慶典模式</span>
+        <span class="festive-tag">🎉 繽紛色彩學習關卡</span>
       </h1>
       <p>先讀主題，再瞄準。打中正確語詞 ＋1 分，打錯 －1 分。</p>
     </div>
@@ -1049,11 +1048,8 @@
       <div class="level-picker-control">
         <label for="level-select">選擇模式／關卡</label>
         <select id="level-select" aria-describedby="mode-hint level-select-note">
-          <option value="campaign">十一關挑戰（從第 1 關開始）</option>
-          <optgroup label="🌈 新增特色學習關卡">
-            <option value="10" selected>第 11 關 · 繽紛色彩（顏色學習關卡）✨</option>
-          </optgroup>
-          <optgroup label="單關試玩（原 10 關＋第 11 關）">
+          <option value="campaign" selected>十一關挑戰（從第 1 關開始）</option>
+          <optgroup label="單關試玩">
             <option value="0">第 1 關 · 動物集合</option>
             <option value="1">第 2 關 · 禮貌用語</option>
             <option value="2">第 3 關 · 家人稱謂</option>
@@ -1064,12 +1060,12 @@
             <option value="7">第 8 關 · 料理動作</option>
             <option value="8">第 9 關 · 滋味辨識</option>
             <option value="9">第 10 關 · 生活場所</option>
-            <option value="10">第 11 關 · 繽紛色彩（顏色學習）</option>
+            <option value="10">第 11 關 · 繽紛色彩</option>
           </optgroup>
         </select>
       </div>
       <div class="level-picker-description">
-        <p id="mode-hint">單關試玩：第 11 關「繽紛色彩」顏色學習關卡，背景採繽紛花俏嘉年華慶典風格！</p>
+        <p id="mode-hint">十一關挑戰：從第 1 關依序闖關；也可直接選擇任一關試玩。</p>
         <p id="level-select-note">切換會重新開始，分數歸零；保留秒數與顯示設定。選好後按下方開始按鈕才倒數（也可直接拉弓試射）。</p>
       </div>
     </section>
@@ -1882,8 +1878,8 @@
     // =========================================================================
     // 5. 遊戲狀態與場景繪製（含繽紛花俏嘉年華背景 SVG）
     // =========================================================================
-    let gameMode = "single"; // "campaign" | "single"
-    let currentLevelIdx = 10; // 預設直接展示第 11 關「繽紛色彩」學習關卡
+    let gameMode = "campaign"; // "campaign" | "single"
+    let currentLevelIdx = 0; // 預設從第 1 關開始，玩到第 11 關才出現繽紛色彩圖鑑與彩色背景
     let totalScore = 0;
     let roundScore = 0;
     let correctHits = 0;
@@ -1946,8 +1942,9 @@
 
     function renderLandscape(level) {
       const svg = document.getElementById("landscape");
-      const useFestive = level.isColorLevel || document.getElementById("festive-bg-toggle").checked;
+      const useFestive = Boolean(level.isColorLevel);
       document.body.classList.toggle("festive-theme", useFestive);
+      document.body.classList.toggle("color-level-active", Boolean(level.isColorLevel));
 
       const cardSize = document.getElementById("target-size").value === "large" ? 94 : 82;
       const platPads = level.stacks.map(st => {
@@ -2051,7 +2048,7 @@
       const dir = document.getElementById("dir-select").value;
       const angleDeg = Number(document.getElementById("angle-slider").value);
       const powerPct = Number(document.getElementById("power-slider").value);
-      const useFestive = level.isColorLevel || document.getElementById("festive-bg-toggle").checked;
+      const useFestive = Boolean(level.isColorLevel);
 
       renderBirdSvg(useFestive, dir);
 
@@ -2824,7 +2821,7 @@
     renderColorPaletteStrip();
     renderLayoutGallery();
     renderTimeInputs();
-    loadLevel(10, true);
+    loadLevel(0, true);
   </script>
 </body>
 </html>
