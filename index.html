@@ -2238,14 +2238,14 @@
       if (!includeRoman || !roma) {
         return lv.titleHan || lv.title;
       }
-      return ${lv.titleHan || lv.title}（）;
+      return `${lv.titleHan || lv.title}（${roma}）`;
     }
 
     function updateStageHeaderPrompt() {
       const level = LEVELS[currentLevelIdx];
       const titleDisplay = getLevelTitle(level, true);
       document.getElementById("round-badge").textContent = level.code;
-      document.getElementById("stage-kicker").textContent = 第  /  關 · ;
+      document.getElementById("stage-kicker").textContent = `第 ${currentLevelIdx + 1} / ${LEVELS.length} 關 · ${titleDisplay}`;
       document.getElementById("layout-label").textContent = `${level.layoutName} · ${level.dir === "left" ? "向左發射 ←" : "向右發射 →"}`;
       document.getElementById("stage-note").textContent = level.note;
 
