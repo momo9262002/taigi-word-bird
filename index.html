@@ -700,12 +700,15 @@
       color: var(--ink);
       line-height: 1.15;
     }
-    .word-tailo {
+    .word-tailo, .word-poj {
       font-size: 11.5px;
       color: #697468;
       margin-top: 2px;
       line-height: 1.1;
       transition: font-size 0.18s ease, color 0.18s ease, font-weight 0.18s ease;
+    }
+    .word-poj {
+      color: #5a3e7a;
     }
     .word-chinese {
       font-size: 11px;
@@ -715,14 +718,16 @@
       line-height: 1.1;
     }
     .targets.no-han .word-han { display: none; }
-    .targets.no-han .word-tailo {
+    .targets.no-han .word-tailo,
+    .targets.no-han .word-poj {
       font-size: 15.5px;
       font-weight: 800;
       color: var(--ink);
-      margin-top: 0;
+      margin-top: 1px;
       letter-spacing: 0.01em;
     }
     .targets.no-tailo .word-tailo { display: none; }
+    .targets.no-poj .word-poj { display: none; }
     .targets.no-chinese .word-chinese { display: none; }
     .color-palette-strip.no-han .color-chip-info b { display: none; }
     .color-palette-strip.no-han .color-chip-info span {
@@ -1057,7 +1062,8 @@
         <div class="color-submode-group">
           <button type="button" class="submode-btn active" id="submode-category-btn">🌟 認詞闖關（打中 4 個顏色語詞）</button>
           <button type="button" class="submode-btn" id="submode-target-btn">🎯 指定色彩神射手（依指定顏色射擊）</button>
-          <button type="button" class="submode-btn" id="quick-tailo-only-btn">🔤 隱藏漢字（練習看羅馬字）</button>
+          <button type="button" class="submode-btn" id="quick-tailo-only-btn">🔤 只顯示台羅</button>
+          <button type="button" class="submode-btn" id="quick-poj-only-btn">📜 只顯示白話字（POJ）</button>
           <button type="button" class="submode-btn" id="shuffle-colors-btn">🔄 換一組顏色題目</button>
         </div>
       </div>
@@ -1101,7 +1107,7 @@
 
         <div class="toast-banner" id="toast-banner" role="status" aria-live="polite"></div>
 
-        <div id="targets" class="targets no-chinese show-color-swatch"></div>
+        <div id="targets" class="targets no-poj no-chinese show-color-swatch"></div>
 
         <svg class="slingshot-overlay" id="slingshot-svg" viewBox="0 0 1191.3333740234375 560" aria-hidden="true">
           <g id="slingshot-wood"></g>
@@ -1162,9 +1168,13 @@
     <section class="display-settings" aria-label="本關顯示與計時設定">
       <div class="display-options">
         <span>語詞呈現</span>
-        <label><input type="checkbox" id="hide-han"> 隱藏漢字（練習看羅馬字）</label>
+        <label><input type="checkbox" id="hide-han"> 隱藏漢字</label>
         <label><input type="checkbox" id="show-tailo" checked> 顯示台羅</label>
+        <label><input type="checkbox" id="show-poj"> 顯示白話字（POJ）</label>
         <label><input type="checkbox" id="show-chinese"> 顯示中文</label>
+        <button type="button" class="submode-btn" id="bottom-poj-only-btn" style="padding:4px 10px;font-size:12px;">📜 只顯示白話字</button>
+        <button type="button" class="submode-btn" id="bottom-tailo-only-btn" style="padding:4px 10px;font-size:12px;">🔤 只顯示台羅</button>
+        <button type="button" class="submode-btn" id="bottom-han-reset-btn" style="padding:4px 10px;font-size:12px;">📝 漢字＋台羅</button>
         <label><input type="checkbox" id="show-swatch" checked> 顏色關卡顯示色塊提示</label>
         <label><input type="checkbox" id="festive-bg-toggle" checked> 繽紛喜悅慶典背景</label>
         <span>標靶大小</span>
@@ -1175,7 +1185,7 @@
         <span id="size-readout" style="color:var(--muted)">82 × 82 px</span>
       </div>
       <div style="color:var(--muted);font-size:12px;">
-        各關發射點與排列不同；可向左或向右射擊。勾選「隱藏漢字」時字卡將放大顯示台羅拼音，方便專注練習羅馬字。
+        支援「只顯示白話字（POJ）」或「只顯示台羅（Tâi-lô）」模式；隱藏漢字時羅馬字會自動放大加粗。
       </div>
     </section>
 
@@ -1203,7 +1213,8 @@
           <thead>
             <tr>
               <th>台語漢字</th>
-              <th>台羅</th>
+              <th>台羅（Tâi-lô）</th>
+              <th>白話字（POJ）</th>
               <th>中文解釋</th>
               <th>答案</th>
               <th>判定與教學備註</th>
@@ -1224,8 +1235,65 @@
 
   <script>
     // =========================================================================
-    // 1. 台語繽紛色彩完整詞庫（核對教育部臺灣台語常用詞辭典）
+    // 1. 台語繽紛色彩完整詞庫（核對教育部臺灣台語常用詞辭典）＋ 台羅轉白話字（POJ）對照
     // =========================================================================
+    const POJ_MAP = {
+      "âng-sik": "âng-sek",
+      "n̂g-sik": "n̂g-sek",
+      "tshenn-sik": "chheⁿ-sek",
+      "nâ-sik": "nâ-sek",
+      "kam-á-sik": "kam-á-sek",
+      "kiô-á-sik": "kiô-á-sek",
+      "oo-sik": "o͘-sek",
+      "pe̍h-sik": "pe̍h-sek",
+      "ku": "ku",
+      "suàn-thâu": "soàn-thâu",
+      "ti-tu": "ti-tu",
+      "tshài-tshī-á": "chhài-chhī-á",
+      "í-á": "í-á",
+      "káu-hiā": "káu-hiā",
+      "tshá": "chhá",
+      "phang": "phang",
+      "gâu-tsá": "gâu-chá",
+      "to-siā": "to-siā",
+      "pháinn-sè": "pháiⁿ-sè",
+      "tsài-huē": "chài-hōe",
+      "a-kong": "a-kong",
+      "a-má": "a-má",
+      "tshang-á": "chhang-á",
+      "a-pah": "a-pah",
+      "a-bú": "a-bú",
+      "ba̍k-tsiu": "ba̍k-chiu",
+      "tiánn": "tiáⁿ",
+      "kha": "kha",
+      "tshuì": "chhùi",
+      "suāinn-á": "soāiⁿ-á",
+      "pak-tóo": "pak-tó͘",
+      "tshài-kue": "chhài-koe",
+      "king-tsio": "keng-chio",
+      "ti-bah": "ti-bah",
+      "âng-tshài-thâu": "âng-chhài-thâu",
+      "ông-lâi": "ông-lâi",
+      "sat-ba̍k-hî": "sat-ba̍k-hî",
+      "kam-á": "kam-á",
+      "jiû-hî": "jiû-hî",
+      "tshân-hn̂g": "chhân-hn̂g",
+      "hê-bí": "hê-bí",
+      "tshue": "chhoe",
+      "tsú": "chú",
+      "tshù": "chhù",
+      "lóo": "ló͘",
+      "sng": "sng",
+      "tinn": "tiⁿ",
+      "khóo": "khó͘",
+      "kiâm": "kiâm",
+      "tshia-thâu": "chhia-thâu"
+    };
+
+    function getPOJ(tailo) {
+      return POJ_MAP[tailo] || tailo;
+    }
+
     const TAIGI_COLORS = [
       {
         id: "red",
@@ -2098,10 +2166,12 @@
           ? `<span class="color-hint-pill" style="background:${t.word.hex}"></span>`
           : "";
 
+        const pojStr = getPOJ(t.word.tailo);
         el.innerHTML = `
           ${swatchHtml}
           <span class="word-han">${t.word.han}</span>
           <span class="word-tailo" lang="nan-Latn">${t.word.tailo}</span>
+          <span class="word-poj" lang="nan-Latn">${pojStr}</span>
           <span class="word-chinese">${t.word.zh}</span>
         `;
         t.el = el;
@@ -2236,6 +2306,10 @@
         target.el.classList.add(isCorrect ? "hit-correct" : "hit-wrong");
       }
 
+      const romaLabel = document.getElementById("show-poj")?.checked && !document.getElementById("show-tailo")?.checked
+        ? getPOJ(w.tailo)
+        : w.tailo;
+
       if (isCorrect) {
         totalScore += 1;
         roundScore += 1;
@@ -2243,12 +2317,12 @@
         targetColorStepIdx += 1;
         playFestiveSound("hit-ok");
         spawnConfetti(target.x + target.w / 2, target.y + target.h / 2, w.hex, 55);
-        showToast(`🎉 答對＋1 分！「${w.han}（${w.tailo}）」＝ ${w.zh}`);
+        showToast(`🎉 答對＋1 分！「${w.han}（${romaLabel}）」＝ ${w.zh}`);
       } else {
         totalScore -= 1;
         roundScore -= 1;
         playFestiveSound("hit-wrong");
-        showToast(`💥 打錯－1 分！「${w.han}（${w.tailo}）」是「${w.zh}」`);
+        showToast(`💥 打錯－1 分！「${w.han}（${romaLabel}）」是「${w.zh}」`);
       }
 
       // 同 stack 上方字卡往下遞補一層（補位不計分）
@@ -2383,15 +2457,21 @@
 
     function renderColorPaletteStrip() {
       const strip = document.getElementById("color-palette-strip");
-      strip.innerHTML = TAIGI_COLORS.map(c => `
-        <button type="button" class="color-chip" data-id="${c.id}">
-          <span class="color-swatch" style="background:${c.hex}"></span>
-          <span class="color-chip-info">
-            <b>${c.han}</b>
-            <span>${c.tailo} · ${c.zh}</span>
-          </span>
-        </button>
-      `).join("");
+      const showPoj = document.getElementById("show-poj")?.checked;
+      const showTailo = document.getElementById("show-tailo")?.checked;
+      strip.innerHTML = TAIGI_COLORS.map(c => {
+        const poj = getPOJ(c.tailo);
+        const romaText = showPoj && !showTailo ? poj : (showPoj && showTailo ? `${c.tailo} / ${poj}` : c.tailo);
+        return `
+          <button type="button" class="color-chip" data-id="${c.id}">
+            <span class="color-swatch" style="background:${c.hex}"></span>
+            <span class="color-chip-info">
+              <b>${c.han}</b>
+              <span>${romaText} · ${c.zh}</span>
+            </span>
+          </button>
+        `;
+      }).join("");
 
       strip.querySelectorAll(".color-chip").forEach(btn => {
         btn.addEventListener("click", () => {
@@ -2399,7 +2479,7 @@
           if (!c) return;
           playFestiveSound("hit-ok");
           spawnConfetti(W * 0.5, 180, c.hex, 32);
-          showToast(`🎨 【${c.han} ${c.tailo}】(${c.zh})：${c.note}`, 3800);
+          showToast(`🎨 【${c.han}｜台羅 ${c.tailo}｜白話字 ${getPOJ(c.tailo)}】(${c.zh})：${c.note}`, 3800);
         });
       });
     }
@@ -2486,6 +2566,7 @@
             <b>${w.han}</b>
           </td>
           <td lang="nan-Latn">${w.tailo}</td>
+          <td lang="nan-Latn" style="color:#5a3e7a;font-weight:600;">${getPOJ(w.tailo)}</td>
           <td>${w.zh}</td>
           <td><span class="ans-badge ${w.ok ? 'ans-ok' : 'ans-no'}">${w.ok ? '正確 ＋1' : '干擾 －1'}</span></td>
           <td>${w.note}</td>
@@ -2567,46 +2648,94 @@
       showToast("🔄 已重新洗牌開局！");
     });
 
-    function syncHanTailoDisplay(hideHan) {
-      const hideHanCheckbox = document.getElementById("hide-han");
-      const showTailoCheckbox = document.getElementById("show-tailo");
-      const quickBtn = document.getElementById("quick-tailo-only-btn");
+    function updateDisplayClasses() {
+      const hideHan = document.getElementById("hide-han").checked;
+      const showTailo = document.getElementById("show-tailo").checked;
+      const showPoj = document.getElementById("show-poj").checked;
       const targetsEl = document.getElementById("targets");
       const paletteStrip = document.getElementById("color-palette-strip");
 
-      hideHanCheckbox.checked = hideHan;
-      targetsEl.classList.toggle("no-han", hideHan);
-      paletteStrip.classList.toggle("no-han", hideHan);
+      // 防呆：若隱藏漢字且台羅、白話字都未勾選，自動勾選台羅避免字卡空白
+      if (hideHan && !showTailo && !showPoj) {
+        document.getElementById("show-tailo").checked = true;
+      }
 
-      if (hideHan) {
-        // 隱藏漢字時，強制確保台羅開啟，避免字卡空白
-        showTailoCheckbox.checked = true;
-        targetsEl.classList.remove("no-tailo");
-        quickBtn.classList.add("active");
-        quickBtn.textContent = "🔤 已隱藏漢字（點擊恢復漢字）";
+      const finalHideHan = document.getElementById("hide-han").checked;
+      const finalShowTailo = document.getElementById("show-tailo").checked;
+      const finalShowPoj = document.getElementById("show-poj").checked;
+
+      targetsEl.classList.toggle("no-han", finalHideHan);
+      targetsEl.classList.toggle("no-tailo", !finalShowTailo);
+      targetsEl.classList.toggle("no-poj", !finalShowPoj);
+      paletteStrip.classList.toggle("no-han", finalHideHan);
+
+      const isTailoOnly = finalHideHan && finalShowTailo && !finalShowPoj;
+      const isPojOnly = finalHideHan && !finalShowTailo && finalShowPoj;
+
+      document.getElementById("quick-tailo-only-btn").classList.toggle("active", isTailoOnly);
+      document.getElementById("bottom-tailo-only-btn").classList.toggle("active", isTailoOnly);
+      document.getElementById("quick-poj-only-btn").classList.toggle("active", isPojOnly);
+      document.getElementById("bottom-poj-only-btn").classList.toggle("active", isPojOnly);
+
+      renderColorPaletteStrip();
+    }
+
+    function setPresetDisplayMode(mode) {
+      const hideHanEl = document.getElementById("hide-han");
+      const showTailoEl = document.getElementById("show-tailo");
+      const showPojEl = document.getElementById("show-poj");
+
+      if (mode === "poj-only") {
+        hideHanEl.checked = true;
+        showTailoEl.checked = false;
+        showPojEl.checked = true;
+        updateDisplayClasses();
+        showToast("📜 已切換為「只顯示白話字（POJ）」模式！");
+      } else if (mode === "tailo-only") {
+        hideHanEl.checked = true;
+        showTailoEl.checked = true;
+        showPojEl.checked = false;
+        updateDisplayClasses();
+        showToast("🔤 已切換為「只顯示台羅（Tâi-lô）」模式！");
       } else {
-        quickBtn.classList.remove("active");
-        quickBtn.textContent = "🔤 隱藏漢字（練習看羅馬字）";
+        hideHanEl.checked = false;
+        showTailoEl.checked = true;
+        showPojEl.checked = false;
+        updateDisplayClasses();
+        showToast("📝 已恢復「漢字＋台羅」顯示模式！");
       }
     }
 
-    document.getElementById("hide-han").addEventListener("change", e => {
-      syncHanTailoDisplay(e.target.checked);
-      showToast(e.target.checked ? "🔤 已隱藏漢字：現在字卡放大顯示台羅拼音！" : "📝 已恢復顯示台語漢字！");
+    document.getElementById("hide-han").addEventListener("change", () => {
+      updateDisplayClasses();
+    });
+    document.getElementById("show-tailo").addEventListener("change", () => {
+      updateDisplayClasses();
+    });
+    document.getElementById("show-poj").addEventListener("change", () => {
+      updateDisplayClasses();
     });
 
     document.getElementById("quick-tailo-only-btn").addEventListener("click", () => {
-      const nextState = !document.getElementById("hide-han").checked;
-      syncHanTailoDisplay(nextState);
-      showToast(nextState ? "🔤 已隱藏漢字：專注看羅馬字（台羅）射擊吧！" : "📝 已恢復顯示台語漢字！");
+      const isAlready = document.getElementById("hide-han").checked && document.getElementById("show-tailo").checked && !document.getElementById("show-poj").checked;
+      setPresetDisplayMode(isAlready ? "han-tailo" : "tailo-only");
+    });
+    document.getElementById("bottom-tailo-only-btn").addEventListener("click", () => {
+      const isAlready = document.getElementById("hide-han").checked && document.getElementById("show-tailo").checked && !document.getElementById("show-poj").checked;
+      setPresetDisplayMode(isAlready ? "han-tailo" : "tailo-only");
     });
 
-    document.getElementById("show-tailo").addEventListener("change", e => {
-      if (!e.target.checked && document.getElementById("hide-han").checked) {
-        // 若同時取消台羅，自動恢復顯示漢字以免字卡全空
-        syncHanTailoDisplay(false);
-      }
-      document.getElementById("targets").classList.toggle("no-tailo", !e.target.checked);
+    document.getElementById("quick-poj-only-btn").addEventListener("click", () => {
+      const isAlready = document.getElementById("hide-han").checked && !document.getElementById("show-tailo").checked && document.getElementById("show-poj").checked;
+      setPresetDisplayMode(isAlready ? "han-tailo" : "poj-only");
+    });
+    document.getElementById("bottom-poj-only-btn").addEventListener("click", () => {
+      const isAlready = document.getElementById("hide-han").checked && !document.getElementById("show-tailo").checked && document.getElementById("show-poj").checked;
+      setPresetDisplayMode(isAlready ? "han-tailo" : "poj-only");
+    });
+
+    document.getElementById("bottom-han-reset-btn").addEventListener("click", () => {
+      setPresetDisplayMode("han-tailo");
     });
     document.getElementById("show-chinese").addEventListener("change", e => {
       document.getElementById("targets").classList.toggle("no-chinese", !e.target.checked);
