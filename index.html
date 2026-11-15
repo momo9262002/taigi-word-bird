@@ -576,12 +576,14 @@
     .arena {
       position: relative;
       width: 100%;
+      max-width: 100%;
       aspect-ratio: 1191.333 / 560;
-      min-height: 360px;
+      min-height: 0;
       background: #eaf0e0;
       overflow: hidden;
       user-select: none;
       touch-action: none;
+      box-sizing: border-box;
     }
     .landscape {
       position: absolute;
@@ -673,21 +675,23 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 4px;
+      padding: 2px 1px;
       text-align: center;
+      box-sizing: border-box;
+      overflow: hidden;
       transition: top 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.2s ease, opacity 0.2s ease;
     }
     .target::before, .target::after {
       content: "";
       position: absolute;
-      top: 6px;
+      top: 5px;
       width: 4px;
       height: 4px;
       border-radius: 50%;
       background: #c5b689;
     }
-    .target::before { left: 6px; }
-    .target::after { right: 6px; }
+    .target::before { left: 5px; }
+    .target::after { right: 5px; }
 
     /* 顏色學習關卡的繽紛花俏字卡外框 */
     body.festive-theme .target {
@@ -706,10 +710,10 @@
     body.festive-theme .target[data-festive-border="7"] { border-color: #00bbf9; }
 
     .target .color-hint-pill {
-      width: 28px;
-      height: 8px;
+      width: 24px;
+      height: 6px;
       border-radius: 999px;
-      margin-bottom: 3px;
+      margin-bottom: 2px;
       border: 1px solid rgba(0,0,0,0.18);
       display: none;
     }
@@ -718,32 +722,36 @@
     }
 
     .word-han {
-      font-size: 19px;
+      font-size: clamp(12px, 3.2vw, 19px);
       font-weight: 800;
       color: var(--ink);
-      line-height: 1.15;
+      line-height: 1.05;
+      white-space: nowrap;
     }
     .word-tailo, .word-poj {
-      font-size: 11.5px;
+      font-size: clamp(8px, 2.1vw, 11.5px);
       color: #697468;
-      margin-top: 2px;
-      line-height: 1.1;
+      margin-top: 1px;
+      line-height: 1.05;
+      max-width: 96%;
+      word-break: break-all;
       transition: font-size 0.18s ease, color 0.18s ease, font-weight 0.18s ease;
     }
     .word-poj {
       color: #5a3e7a;
     }
     .word-chinese {
-      font-size: 11px;
+      font-size: clamp(7.5px, 1.8vw, 11px);
       color: #9b6b2f;
-      margin-top: 2px;
+      margin-top: 1px;
       font-weight: 600;
-      line-height: 1.1;
+      line-height: 1.05;
+      white-space: nowrap;
     }
     .targets.no-han .word-han { display: none; }
     .targets.no-han .word-tailo,
     .targets.no-han .word-poj {
-      font-size: 15.5px;
+      font-size: clamp(10.5px, 3vw, 16px);
       font-weight: 800;
       color: var(--ink);
       margin-top: 1px;
@@ -917,27 +925,43 @@
 
     /* 顯示設定區 */
     .display-settings {
+      margin-bottom: 18px;
+    }
+    .display-settings-box {
+      background: #faf9f2;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .preset-pill-group {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 16px;
+      gap: 8px;
       flex-wrap: wrap;
-      margin-bottom: 18px;
-      padding: 8px 4px;
+    }
+    .display-checks-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 8px 12px;
       font-size: 13px;
     }
-    .display-options {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-    .display-options label {
+    .display-checks-grid label {
       display: inline-flex;
       align-items: center;
       gap: 6px;
       cursor: pointer;
       font-weight: 600;
+    }
+    .size-control-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      padding-top: 6px;
+      border-top: 1px dashed var(--line);
     }
 
     /* 時間設定與題庫表格 */
@@ -1017,6 +1041,207 @@
       gap: 10px;
     }
     footer.site-footer a { color: var(--ink); }
+
+    /* =========================================================================
+       手機版面極致優化（避免擁擠、消除橫向破版、首屏可見遊戲主體）
+       ========================================================================= */
+    html, body {
+      overflow-x: hidden;
+      width: 100%;
+      max-width: 100vw;
+    }
+    .mobile-tip-banner {
+      display: none;
+      background: #eef5e8;
+      color: #3b573a;
+      font-size: 11.5px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      text-align: center;
+      font-weight: 600;
+      border: 1px dashed #c0d8b5;
+    }
+    @media (max-width: 768px) {
+      .mobile-tip-banner {
+        display: block;
+      }
+      main {
+        padding: 10px 12px 32px;
+        max-width: 100%;
+        box-sizing: border-box;
+      }
+      .site-header {
+        padding: 8px 12px;
+      }
+      .brand-text small { display: none; }
+      .header-actions .badge-pill { display: none; }
+      .link-btn { padding: 4px 8px; font-size: 12px; }
+
+      .intro {
+        margin-bottom: 8px;
+      }
+      .intro .eyebrow { display: none; }
+      .intro h1 {
+        font-size: 19px;
+        margin-bottom: 2px;
+      }
+      .intro p {
+        font-size: 12px;
+        line-height: 1.3;
+      }
+
+      .level-picker {
+        padding: 8px 12px;
+        margin-bottom: 8px;
+        gap: 6px;
+      }
+      .level-picker-control {
+        min-width: 100%;
+        width: 100%;
+        gap: 3px;
+      }
+      .level-picker-control label {
+        font-size: 11px;
+      }
+      .level-picker-control select {
+        width: 100%;
+        font-size: 13px;
+        padding: 6px 8px;
+      }
+      .level-picker-description {
+        display: none;
+      }
+
+      .round-progress {
+        display: flex;
+        overflow-x: auto;
+        gap: 6px;
+        padding: 2px 2px 6px;
+        margin-bottom: 8px;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+      }
+      .round-progress::-webkit-scrollbar { display: none; }
+      .round-progress li {
+        flex: 0 0 auto;
+        min-width: 50px;
+        padding-top: 4px;
+        border-top-width: 2px;
+        text-align: center;
+      }
+      .round-progress li span {
+        font-size: 12px;
+        font-weight: 800;
+      }
+      .round-progress li small {
+        font-size: 10px;
+        white-space: nowrap;
+      }
+
+      .game-shell {
+        border-radius: 14px;
+        margin-bottom: 12px;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+      }
+      .stage-header {
+        padding: 8px 12px;
+        gap: 6px;
+      }
+      .stage-title-group {
+        gap: 8px;
+      }
+      .round-badge {
+        width: 36px;
+        height: 36px;
+        font-size: 15px;
+      }
+      .stage-meta small {
+        font-size: 11px;
+      }
+      .stage-meta h2 {
+        font-size: 15px;
+        line-height: 1.2;
+      }
+      .stage-note {
+        display: none;
+      }
+      .score-panel {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        width: 100%;
+        gap: 4px;
+        margin-top: 4px;
+        padding-top: 6px;
+        border-top: 1px dashed var(--line);
+        text-align: center;
+      }
+      .score-item {
+        text-align: center;
+      }
+      .score-item small {
+        font-size: 10px;
+      }
+      .score-item b {
+        font-size: 17px;
+      }
+
+      .controls-panel {
+        padding: 10px 12px 14px;
+      }
+      .controls-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px 12px;
+      }
+      .controls-row > .control-block:first-child {
+        grid-column: 1 / -1;
+      }
+      .controls-row > .control-block:first-child select {
+        width: 100%;
+      }
+      .action-buttons {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+        margin-top: 4px;
+      }
+      .action-buttons .primary-btn,
+      .action-buttons .secondary-btn {
+        width: 100%;
+        text-align: center;
+        padding: 9px 4px;
+        font-size: 13px;
+      }
+      .drag-help {
+        font-size: 11px;
+        margin-top: 6px;
+        text-align: center;
+      }
+      .sub-hint-bar {
+        display: none;
+      }
+
+      .preset-pill-group {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+      }
+      .preset-pill-group .submode-btn {
+        width: 100%;
+        text-align: center;
+        padding: 7px 2px;
+        font-size: 12px;
+      }
+      .display-checks-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px 10px;
+        font-size: 12px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1035,6 +1260,7 @@
   </header>
 
   <main id="game">
+    <div class="mobile-tip-banner">📱 手機橫向（旋轉螢幕）視野更寬闊、字體更大更清楚喔！</div>
     <div class="intro">
       <p class="eyebrow">TAIGI WORD ADVENTURE</p>
       <h1>
@@ -1185,25 +1411,30 @@
 
     <!-- 顯示設定 -->
     <section class="display-settings" aria-label="本關顯示與計時設定">
-      <div class="display-options">
-        <span>語詞呈現</span>
-        <label><input type="checkbox" id="hide-han"> 隱藏漢字</label>
-        <label><input type="checkbox" id="show-tailo" checked> 顯示台羅</label>
-        <label><input type="checkbox" id="show-poj"> 顯示白話字（POJ）</label>
-        <label><input type="checkbox" id="show-chinese"> 顯示中文</label>
-        <button type="button" class="submode-btn" id="bottom-poj-only-btn" style="padding:4px 10px;font-size:12px;">📜 只顯示白話字</button>
-        <button type="button" class="submode-btn" id="bottom-tailo-only-btn" style="padding:4px 10px;font-size:12px;">🔤 只顯示台羅</button>
-        <button type="button" class="submode-btn" id="bottom-han-reset-btn" style="padding:4px 10px;font-size:12px;">📝 漢字＋台羅</button>
-        <label><input type="checkbox" id="show-swatch" checked> 顏色關卡顯示色塊提示</label>
-        <label><input type="checkbox" id="festive-bg-toggle" checked> 繽紛喜悅慶典背景</label>
-        <span>標靶大小</span>
-        <select id="target-size">
-          <option value="normal" selected>一般</option>
-          <option value="large">加大</option>
-        </select>
-        <span id="size-readout" style="color:var(--muted)">82 × 82 px</span>
+      <div class="display-settings-box">
+        <div class="preset-pill-group">
+          <button type="button" class="submode-btn" id="bottom-han-reset-btn">📝 漢字＋台羅</button>
+          <button type="button" class="submode-btn" id="bottom-tailo-only-btn">🔤 只顯示台羅</button>
+          <button type="button" class="submode-btn" id="bottom-poj-only-btn">📜 只顯示白話字</button>
+        </div>
+        <div class="display-checks-grid">
+          <label><input type="checkbox" id="hide-han"> 隱藏漢字</label>
+          <label><input type="checkbox" id="show-tailo" checked> 顯示台羅</label>
+          <label><input type="checkbox" id="show-poj"> 顯示白話字（POJ）</label>
+          <label><input type="checkbox" id="show-chinese"> 顯示中文</label>
+          <label><input type="checkbox" id="show-swatch" checked> 顏色關卡色塊提示</label>
+          <label><input type="checkbox" id="festive-bg-toggle" checked> 專屬主題背景</label>
+        </div>
+        <div class="size-control-row">
+          <label for="target-size">標靶大小：</label>
+          <select id="target-size">
+            <option value="normal" selected>一般</option>
+            <option value="large">加大</option>
+          </select>
+          <span id="size-readout" style="color:var(--muted);font-size:12px;">82 × 82 px</span>
+        </div>
       </div>
-      <div style="color:var(--muted);font-size:12px;">
+      <div style="color:var(--muted);font-size:12px;margin-top:6px;">
         支援「只顯示白話字（POJ）」或「只顯示台羅（Tâi-lô）」模式；隱藏漢字時羅馬字會自動放大加粗。
       </div>
     </section>
@@ -2266,20 +2497,26 @@
     function renderTargets() {
       const container = document.getElementById("targets");
       const isLarge = document.getElementById("target-size").value === "large";
-      const cw = isLarge ? 94 : 82;
-      const ch = isLarge ? 92 : 82;
-      const gap = 3;
-
       const arena = document.getElementById("arena");
       const rect = arena.getBoundingClientRect();
       const scaleX = (rect.width || W) / W;
       const scaleY = (rect.height || H) / H;
 
+      // 手機螢幕（寬度 < 600px）給予 1.22x 放大系數，提升字卡可讀性與觸控範圍
+      const isMobile = (rect.width || W) < 600;
+      const boost = isMobile ? 1.22 : 1.0;
+      const rawW = isLarge ? 94 : 82;
+      const rawH = isLarge ? 92 : 82;
+      const cw = rawW * boost;
+      const ch = rawH * boost;
+      const gap = 3 * boost;
+      const xOffset = (cw - rawW) / 2;
+
       container.innerHTML = "";
       activeTargets.forEach((t, idx) => {
         if (t.hit) return;
         const st = LEVELS[currentLevelIdx].stacks[t.stackIdx];
-        const x = st.x - (isLarge ? 6 : 0);
+        const x = st.x - (isLarge ? 6 : 0) - xOffset;
         const y = st.yBase - t.tier * (ch + gap) - (isLarge ? 10 : 0);
         t.x = x;
         t.y = y;
@@ -2292,10 +2529,10 @@
         el.dataset.stack = t.stackIdx;
         el.dataset.tier = t.tier;
         el.dataset.festiveBorder = idx % 8;
-        el.style.left = `${x * scaleX}px`;
-        el.style.top = `${y * scaleY}px`;
-        el.style.width = `${cw * scaleX}px`;
-        el.style.height = `${ch * scaleY}px`;
+        el.style.left = `${(x * scaleX).toFixed(1)}px`;
+        el.style.top = `${(y * scaleY).toFixed(1)}px`;
+        el.style.width = `${(cw * scaleX).toFixed(1)}px`;
+        el.style.height = `${(ch * scaleY).toFixed(1)}px`;
 
         const swatchHtml = t.word.hex
           ? `<span class="color-hint-pill" style="background:${t.word.hex}"></span>`
