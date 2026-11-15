@@ -5,10 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>【台語語詞憤怒鳥 - cjs 】＋ 繽紛色彩學習關卡</title>
   <meta name="description" content="十一個台語主題（新增繽紛色彩顏色學習關卡），多種字卡配置。每關獨立設定時間，答對加一分、答錯扣一分，逾時結束遊戲。">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <style>
+    @font-face {
+      font-family: "jf-openhuninn";
+      src: local("jf-openhuninn-2.1"),
+           local("jf-openhuninn-2.0"),
+           local("jf-openhuninn-1.1"),
+           local("jf-openhuninn"),
+           local("Open 粉圓"),
+           local("粉圓體"),
+           url("https://cdn.jsdelivr.net/gh/justfont/open-huninn-font@master/font/jf-openhuninn-2.1.ttf") format("truetype"),
+           url("https://cdn.jsdelivr.net/gh/justfont/open-huninn-font@master/font/jf-openhuninn-2.0.ttf") format("truetype");
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+
     html { scrollbar-gutter: stable; scroll-behavior: smooth; }
     :root {
       color-scheme: light;
+      --font-huninn: "jf-openhuninn", "jf-openhuninn-2.1", "jf-openhuninn-2.0", "Open 粉圓", "粉圓體", "PingFang TC", "Microsoft JhengHei", sans-serif;
       --ink: #293e35;
       --muted: #687067;
       --green: #355546;
@@ -42,10 +59,16 @@
       background-attachment: fixed;
     }
 
-    * { box-sizing: border-box; }
+    *, *::before, *::after {
+      box-sizing: border-box;
+      font-family: var(--font-huninn);
+    }
+    button, input, select, textarea {
+      font-family: var(--font-huninn);
+    }
     body {
       margin: 0;
-      font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, -apple-system, sans-serif;
+      font-family: var(--font-huninn);
       background: var(--paper);
       color: var(--ink);
       line-height: 1.5;
