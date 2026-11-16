@@ -728,13 +728,20 @@
       line-height: 1.05;
       white-space: nowrap;
     }
+    .syl {
+      display: inline-block;
+      white-space: nowrap;
+    }
     .word-tailo, .word-poj {
-      font-size: clamp(8px, 2.1vw, 11.5px);
+      font-size: clamp(8px, 2.1vw, 11px);
       color: #697468;
       margin-top: 1px;
-      line-height: 1.05;
-      max-width: 96%;
-      word-break: break-all;
+      line-height: 1.12;
+      max-width: 98%;
+      word-break: normal;
+      overflow-wrap: normal;
+      hyphens: manual;
+      text-align: center;
       transition: font-size 0.18s ease, color 0.18s ease, font-weight 0.18s ease;
     }
     .word-poj {
@@ -751,11 +758,12 @@
     .targets.no-han .word-han { display: none; }
     .targets.no-han .word-tailo,
     .targets.no-han .word-poj {
-      font-size: clamp(10.5px, 3vw, 16px);
+      font-size: clamp(10px, 2.7vw, 14.5px);
       font-weight: 800;
       color: var(--ink);
       margin-top: 1px;
       letter-spacing: 0.01em;
+      line-height: 1.15;
     }
     .targets.no-tailo .word-tailo { display: none; }
     .targets.no-poj .word-poj { display: none; }
@@ -1542,6 +1550,13 @@
 
     function getPOJ(tailo) {
       return POJ_MAP[tailo] || tailo;
+    }
+
+    // 依教育部臺灣台語辭典音節連字符規則格式化羅馬字（台羅與白話字）：
+    // 每個音節包入 span.syl（nowrap），避免音節內部斷字；折行僅允許發生在連字符後（-<wbr>）
+    function formatRomaHtml(str) {
+      if (!str) return "";
+      return str.split("-").map(syl => `<span class="syl">${syl}</span>`).join("-<wbr>");
     }
 
     const TAIGI_COLORS = [
@@ -2542,8 +2557,8 @@
         el.innerHTML = `
           ${swatchHtml}
           <span class="word-han">${t.word.han}</span>
-          <span class="word-tailo" lang="nan-Latn">${t.word.tailo}</span>
-          <span class="word-poj" lang="nan-Latn">${pojStr}</span>
+          <span class="word-tailo" lang="nan-Latn">${formatRomaHtml(t.word.tailo)}</span>
+          <span class="word-poj" lang="nan-Latn">${formatRomaHtml(pojStr)}</span>
           <span class="word-chinese">${t.word.zh}</span>
         `;
         t.el = el;
